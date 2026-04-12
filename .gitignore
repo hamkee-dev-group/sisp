@@ -1,0 +1,10 @@
+*.o
+*.a
+*.so
+*.out
+.*/
+!.git/
+src/sisp
+programs/
+# DevLoop
+.devloop/
