@@ -10,6 +10,8 @@ extern objectp F_numeq(const struct object *);
 extern objectp F_add(const struct object *);
 extern objectp F_prod(const struct object *);
 extern objectp F_div(const struct object *);
+extern objectp F_sub(const struct object *);
+extern objectp F_numneq(const struct object *);
 extern objectp F_mod(const struct object *);
 extern int cmp_numeric(objectp, objectp);
 extern objectp F_and(const struct object *);
@@ -39,7 +41,7 @@ extern objectp F_null(const struct object *);
 extern objectp F_symbolp(const struct object *);
 extern objectp F_endp(const struct object *);
 
-#define FUNCS_N 84
+#define FUNCS_N 86
 extern const funcs functions[FUNCS_N];
 #define ISNUMERIC(x) ((x)->type == OBJ_INTEGER || (x)->type == OBJ_RATIONAL) \
 						 ? true                                              \

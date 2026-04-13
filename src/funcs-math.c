@@ -119,6 +119,12 @@ F_add(const struct object *args)
     objectp p;
     i = n = 0L;
     d = 1L;
+    if (args == nil)
+    {
+        p = new_object(OBJ_INTEGER);
+        p->value.i = 0L;
+        return p;
+    }
     do
     {
         p = eval(car(args));
@@ -158,6 +164,12 @@ F_prod(const struct object *args)
     objectp p;
 
     i = d = n = 1L;
+    if (args == nil)
+    {
+        p = new_object(OBJ_INTEGER);
+        p->value.i = 1L;
+        return p;
+    }
     do
     {
         p = eval(car(args));
@@ -189,36 +201,13 @@ F_prod(const struct object *args)
     return eval(p);
 }
 
-objectp
-F_div(const struct object *args)
+static objectp
+div_two(long int nu, long int du, long int nv, long int dv)
 {
-    long int g, u, v;
-    objectp d, n, rat;
-
-    n = eval(car(args));
-    d = eval(car(cdr(args)));
-    _ASSERTP(ISNUMERIC(n), NOT NUMERIC, DIV, n);
-    _ASSERTP(ISNUMERIC(d), NOT NUMERIC, DIV, d);
-
-    if (n->type == OBJ_INTEGER)
-    {
-        g = n->value.i;
-        n = new_object(OBJ_RATIONAL);
-        n->value.r.n = g;
-        n->value.r.d = 1L;
-    }
-    if (d->type == OBJ_INTEGER)
-    {
-        _ASSERTP(d->value.i != 0, DIVISION BY ZERO, DIV, d);
-        g = d->value.i;
-        d = new_object(OBJ_RATIONAL);
-        d->value.r.n = g;
-        d->value.r.d = 1L;
-    }
-    _ASSERTP(d->value.r.d != 0, ZERO DENOMINATOR, DIV, d);
-    _ASSERTP(n->value.r.d != 0, ZERO DENOMINATOR, DIV, n);
-    u = n->value.r.n * d->value.r.d;
-    v = n->value.r.d * d->value.r.n;
+    long int u, v, g;
+    objectp rat;
+    u = nu * dv;
+    v = du * nv;
     g = gcd(u, v);
     u = u / g;
     v = v / g;
@@ -240,6 +229,52 @@ F_div(const struct object *args)
         rat->value.r.d = v;
     }
     return rat;
+}
+
+objectp
+F_div(const struct object *args)
+{
+    long int g, rn, rd;
+    objectp p;
+
+    p = eval(car(args));
+    _ASSERTP(ISNUMERIC(p), NOT NUMERIC, DIV, p);
+
+    if (p->type == OBJ_INTEGER)
+    { rn = p->value.i; rd = 1L; }
+    else
+    { rn = p->value.r.n; rd = p->value.r.d; }
+
+    if (cdr(args) == nil)
+    {
+        _ASSERTP(rn != 0, DIVISION BY ZERO, DIV, p);
+        return div_two(1L, 1L, rn, rd);
+    }
+
+    args = cdr(args);
+    do
+    {
+        p = eval(car(args));
+        _ASSERTP(ISNUMERIC(p), NOT NUMERIC, DIV, p);
+        if (p->type == OBJ_INTEGER)
+        {
+            _ASSERTP(p->value.i != 0, DIVISION BY ZERO, DIV, p);
+            g = p->value.i;
+            p = new_object(OBJ_RATIONAL);
+            p->value.r.n = g;
+            p->value.r.d = 1L;
+        }
+        _ASSERTP(p->value.r.n != 0, DIVISION BY ZERO, DIV, p);
+        _ASSERTP(p->value.r.d != 0, ZERO DENOMINATOR, DIV, p);
+        _ASSERTP(rd != 0, ZERO DENOMINATOR, DIV, p);
+        p = div_two(rn, rd, p->value.r.n, p->value.r.d);
+        if (p->type == OBJ_INTEGER)
+        { rn = p->value.i; rd = 1L; }
+        else
+        { rn = p->value.r.n; rd = p->value.r.d; }
+    } while ((args = cdr(args)) != nil);
+
+    return p;
 }
 objectp
 F_pow(const struct object *args)
@@ -376,4 +411,83 @@ F_iff(const struct object *args)
         r = (p1 != r) ? nil : t;
     } while ((args = cdr(args)) != nil);
     return r;
+}
+
+objectp
+F_sub(const struct object *args)
+{
+    long int i, d, n, g;
+    objectp p;
+
+    p = eval(car(args));
+    _ASSERTP(ISNUMERIC(p), NOT NUMERIC, SUB, p);
+
+    if (p->type == OBJ_INTEGER)
+    { i = p->value.i; n = 0L; d = 1L; }
+    else
+    { i = 0L; n = p->value.r.n; d = p->value.r.d; }
+
+    if (cdr(args) == nil)
+    {
+        if (n == 0L)
+        {
+            p = new_object(OBJ_INTEGER);
+            p->value.i = -i;
+            return p;
+        }
+        p = new_object(OBJ_RATIONAL);
+        p->value.r.n = -n;
+        p->value.r.d = d;
+        return p;
+    }
+
+    args = cdr(args);
+    do
+    {
+        p = eval(car(args));
+        if (p->type == OBJ_INTEGER)
+            i -= p->value.i;
+        else if (p->type == OBJ_RATIONAL)
+        {
+            n = (n * p->value.r.d) - (d * p->value.r.n);
+            d *= p->value.r.d;
+        }
+        else
+            _ASSERTP(false, NOT NUMERIC, SUB, p);
+    } while ((args = cdr(args)) != nil);
+
+    if (n == 0L)
+    {
+        p = new_object(OBJ_INTEGER);
+        p->value.i = i;
+        return p;
+    }
+    p = new_object(OBJ_RATIONAL);
+    if (i != 0L)
+        n += d * i;
+    g = gcd(n, d);
+    p->value.r.n = n / g;
+    p->value.r.d = d / g;
+    return eval(p);
+}
+
+objectp
+F_numneq(const struct object *args)
+{
+    const struct object *outer, *inner;
+    objectp a, b;
+
+    for (outer = args; outer != nil; outer = cdr(outer))
+    {
+        a = eval(car(outer));
+        _ASSERTP(ISNUMERIC(a), NOT NUMERIC, /=, a);
+        for (inner = cdr(outer); inner != nil; inner = cdr(inner))
+        {
+            b = eval(car(inner));
+            _ASSERTP(ISNUMERIC(b), NOT NUMERIC, /=, b);
+            if (cmp_numeric(a, b) == 0)
+                return nil;
+        }
+    }
+    return t;
 }

@@ -1107,7 +1107,9 @@ F_lazy(const struct object *arg)
 const funcs functions[] = {
 	{"*", F_prod},
 	{"+", F_add},
+	{"-", F_sub},
 	{"/", F_div},
+	{"/=", F_numneq},
 	{"<", F_less},
 	{"<=", F_lesseq},
 	{"<=>", F_iff},

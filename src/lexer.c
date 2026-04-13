@@ -143,6 +143,19 @@ int gettoken(void)
 		case '8':
 		case '9':
 		case '-':
+			if (c == '-')
+			{
+				int next = XGETC();
+				if (!isdigit(next))
+				{
+					XUNGETC(next);
+					p = token_buffer;
+					*p++ = c;
+					*p = '\0';
+					return IDENTIFIER;
+				}
+				XUNGETC(next);
+			}
 			p = token_buffer;
 			do
 			{
