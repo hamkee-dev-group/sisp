@@ -34,6 +34,25 @@ for test_file in "$SCRIPT_DIR"/test-*.lsp; do
     fi
 done
 
+# Shell-level regression test for dump output contracts
+echo ""
+echo "========================================"
+echo "Running: test-dump.sh"
+echo "========================================"
+output=$(cd "$SCRIPT_DIR" && bash "$SCRIPT_DIR/test-dump.sh" 2>&1)
+status=$?
+echo "$output"
+
+p=$(echo "$output" | grep -oi "PASS:" | wc -l | tr -d ' ')
+f=$(echo "$output" | grep -oi "FAIL:" | wc -l | tr -d ' ')
+PASS=$((PASS + p))
+FAIL=$((FAIL + f))
+
+if [ $status -ne 0 ]; then
+    echo "*** test-dump.sh exited with status $status ***"
+    ERRORS=$((ERRORS + 1))
+fi
+
 echo ""
 echo "========================================"
 echo "         TEST SUMMARY"
