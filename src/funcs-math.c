@@ -276,45 +276,83 @@ F_div(const struct object *args)
 
     return p;
 }
+static int
+mul_overflows(long int a, long int b)
+{
+    if (a == 0 || b == 0) return 0;
+    if (a > 0)
+        return b > 0 ? a > LONG_MAX / b : b < LONG_MIN / a;
+    else
+        return b > 0 ? a < LONG_MIN / b : a < LONG_MAX / b;
+}
+
+static long int
+ipow_checked(long int base, long int exp, int *overflow)
+{
+    long int result = 1;
+    for (; exp > 0; exp--)
+    {
+        if (mul_overflows(result, base))
+        {
+            *overflow = 1;
+            return 0;
+        }
+        result *= base;
+    }
+    return result;
+}
+
 objectp
 F_pow(const struct object *args)
 {
     objectp arg1, arg2, r;
-    long int exp;
+    long int exp, n, d;
+    int ovf = 0;
+
     arg1 = eval(car(args));
     arg2 = eval(cadr(args));
     _ASSERTP(ISNUMERIC(arg1), NOT NUMERIC, ^, arg1);
     _ASSERTP(arg2->type == OBJ_INTEGER, NOT INTEGER, ^, arg2);
     exp = arg2->value.i;
-    if(exp < 0) {
-        _ASSERTP(exp > LONG_MIN, EXPONENT OVERFLOW, ^, arg2);
-        exp = -exp;
-        if (arg1->type == OBJ_INTEGER)
-            _ASSERTP(arg1->value.i != 0, DIVISION BY ZERO, ^, arg1);
-        else
-            _ASSERTP(arg1->value.r.n != 0, DIVISION BY ZERO, ^, arg1);
-        r = new_object(OBJ_RATIONAL);
-        if (arg1->type == OBJ_INTEGER) {
-            r->value.r.n = 1;
-            r->value.r.d = (long int)pow((double)arg1->value.i, (double)exp);
-        } else {
-            r->value.r.n = (long int)pow((double)arg1->value.r.d, (double)exp);
-            r->value.r.d = (long int)pow((double)arg1->value.r.n, (double)exp);
-        }
-        return r;
-    }
+
     if (arg1->type == OBJ_INTEGER)
+    { n = arg1->value.i; d = 1L; }
+    else
+    { n = arg1->value.r.n; d = arg1->value.r.d; }
+
+    if (exp == 0)
     {
         r = new_object(OBJ_INTEGER);
-        r->value.i = (long int)pow((double)arg1->value.i, (double)exp);
+        r->value.i = 1;
+        return r;
     }
-    else
+
+    if (exp < 0)
     {
-        r = new_object(OBJ_RATIONAL);
-        r->value.r.n = (long int)pow((double)arg1->value.r.n, (double)exp);
-        r->value.r.d = (long int)pow((double)arg1->value.r.d, (double)exp);
+        _ASSERTP(exp > LONG_MIN, EXPONENT OVERFLOW, ^, arg2);
+        _ASSERTP(n != 0, DIVISION BY ZERO, ^, arg1);
+        exp = -exp;
+        long int tmp = n;
+        n = d;
+        d = tmp;
     }
-    return r;
+
+    n = ipow_checked(n, exp, &ovf);
+    _ASSERTP(!ovf, EXPONENT OVERFLOW, ^, arg1);
+    d = ipow_checked(d, exp, &ovf);
+    _ASSERTP(!ovf, EXPONENT OVERFLOW, ^, arg1);
+
+    if (d == 1L)
+    {
+        r = new_object(OBJ_INTEGER);
+        r->value.i = n;
+        return r;
+    }
+
+    r = new_object(OBJ_RATIONAL);
+    r->value.r.n = n;
+    r->value.r.d = d;
+    return eval_rat(r);
 }
 
 objectp
