@@ -37,12 +37,10 @@
 (if (equal (ord '(1 2 3 4 5 6 7 8 9 10)) 10) (print "PASS: ord-ten") (print "FAIL: ord-ten"))
 
 ; --- nth ---
-(if (equal (nth 1 '(a b c)) 'a) (print "PASS: nth-first") (print "FAIL: nth-first"))
-(if (equal (nth 2 '(a b c)) 'b) (print "PASS: nth-second") (print "FAIL: nth-second"))
-(if (equal (nth 3 '(a b c)) 'c) (print "PASS: nth-third") (print "FAIL: nth-third"))
-(define nth-zero-flag "PASS")
-(progn (+ 0 (nth 0 '(a b c))) (define nth-zero-flag "FAIL"))
-(print (cat nth-zero-flag ": nth-zero"))
+(if (equal (nth 0 '(a b c)) 'a) (print "PASS: nth-first") (print "FAIL: nth-first"))
+(if (equal (nth 1 '(a b c)) 'b) (print "PASS: nth-second") (print "FAIL: nth-second"))
+(if (equal (nth 2 '(a b c)) 'c) (print "PASS: nth-third") (print "FAIL: nth-third"))
+(if (equal (nth 10 '(a b c)) nil) (print "PASS: nth-out-of-range") (print "FAIL: nth-out-of-range"))
 
 (define nth-neg-flag "PASS")
 (progn (+ 0 (nth -1 '(a b c))) (define nth-neg-flag "FAIL"))

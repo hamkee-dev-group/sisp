@@ -18,11 +18,11 @@
          (cons (car tbl) (db-select (cdr tbl) col val)))
         (t (db-select (cdr tbl) col val))))
 
-(define eng-team (db-select employees 3 'eng))
+(define eng-team (db-select employees 2 'eng))
 (print "--- SELECT dept=eng ---")
 (print eng-team)
 
-(define sales-team (db-select employees 3 'sales))
+(define sales-team (db-select employees 2 'sales))
 (print "--- SELECT dept=sales ---")
 (print sales-team)
 
@@ -33,10 +33,10 @@
                  (db-project (cdr tbl) col)))))
 
 (print "--- PROJECT name ---")
-(print (db-project employees 2))
+(print (db-project employees 1))
 
 (print "--- PROJECT dept ---")
-(print (db-project employees 3))
+(print (db-project employees 2))
 
 ; --- UNION via set operations ---
 (define eng-set {alice carol})
@@ -63,14 +63,14 @@
 
 (define (lookup-dept dname dlist)
   (cond ((null dlist) 0)
-        ((eq (car (car dlist)) dname) (nth 2 (car dlist)))
+        ((eq (car (car dlist)) dname) (nth 1 (car dlist)))
         (t (lookup-dept dname (cdr dlist)))))
 
 (define (join-rows tbl dtbl)
   (cond ((null tbl) nil)
         (t (let ((row (car tbl))
-                 (budget (lookup-dept (nth 3 (car tbl)) dtbl)))
-             (cons (list (nth 1 row) (nth 2 row) (nth 3 row) budget)
+                 (budget (lookup-dept (nth 2 (car tbl)) dtbl)))
+             (cons (list (nth 0 row) (nth 1 row) (nth 2 row) budget)
                    (join-rows (cdr tbl) dtbl))))))
 
 (define joined (join-rows employees depts))

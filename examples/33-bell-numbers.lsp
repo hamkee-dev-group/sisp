@@ -22,7 +22,7 @@
 (define (build-next-row prev-row new-row-so-far idx)
   (if (= idx (ord prev-row)) new-row-so-far
     (let ((next-val (+ (last-elem new-row-so-far)
-                       (nth (+ idx 1) prev-row))))
+                       (nth idx prev-row))))
       (build-next-row prev-row
                       (my-append new-row-so-far (list next-val))
                       (+ idx 1)))))
@@ -49,7 +49,7 @@
 (define (bell n)
   (if (= n 0) 1
     (let ((rows (bell-rows n)))
-      (car (nth (+ n 1) rows)))))
+      (car (nth n rows)))))
 
 ; ============================================================
 ; Compute and verify B(0) through B(6)
@@ -70,7 +70,7 @@
 (print "--- Bell Numbers ---")
 
 (define (check-bell n expected)
-  (let ((bn (car (nth (+ n 1) rows))))
+  (let ((bn (car (nth n rows))))
     (progn
       (print bn)
       (if (= bn expected)

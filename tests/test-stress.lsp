@@ -7,9 +7,9 @@
 ; --- Large list creation ---
 (define biglist (seq 1 500))
 (if (equal (ord biglist) 500) (print "PASS: stress-seq-500") (print "FAIL: stress-seq-500"))
-(if (equal (nth 1 biglist) 1) (print "PASS: stress-nth-first") (print "FAIL: stress-nth-first"))
-(if (equal (nth 500 biglist) 500) (print "PASS: stress-nth-last") (print "FAIL: stress-nth-last"))
-(if (equal (nth 250 biglist) 250) (print "PASS: stress-nth-mid") (print "FAIL: stress-nth-mid"))
+(if (equal (nth 0 biglist) 1) (print "PASS: stress-nth-first") (print "FAIL: stress-nth-first"))
+(if (equal (nth 499 biglist) 500) (print "PASS: stress-nth-last") (print "FAIL: stress-nth-last"))
+(if (equal (nth 249 biglist) 250) (print "PASS: stress-nth-mid") (print "FAIL: stress-nth-mid"))
 
 ; --- Deep recursion ---
 (define (sum-to n) (if (equal n 0) 0 (+ n (sum-to (+ n -1)))))
@@ -36,16 +36,16 @@
 (define (id x) x)
 (define mapped (map id (seq 1 200)))
 (if (equal (ord mapped) 200) (print "PASS: stress-map-200") (print "FAIL: stress-map-200"))
-(if (equal (nth 1 mapped) 1) (print "PASS: stress-map-first") (print "FAIL: stress-map-first"))
-(if (equal (nth 200 mapped) 200) (print "PASS: stress-map-last") (print "FAIL: stress-map-last"))
+(if (equal (nth 0 mapped) 1) (print "PASS: stress-map-first") (print "FAIL: stress-map-first"))
+(if (equal (nth 199 mapped) 200) (print "PASS: stress-map-last") (print "FAIL: stress-map-last"))
 
 ; --- Append large lists ---
 (define big1 (seq 1 200))
 (define big2 (seq 201 400))
 (define combined (append big1 big2))
 (if (equal (ord combined) 400) (print "PASS: stress-append-400") (print "FAIL: stress-append-400"))
-(if (equal (nth 200 combined) 200) (print "PASS: stress-append-200th") (print "FAIL: stress-append-200th"))
-(if (equal (nth 201 combined) 201) (print "PASS: stress-append-201st") (print "FAIL: stress-append-201st"))
+(if (equal (nth 199 combined) 200) (print "PASS: stress-append-200th") (print "FAIL: stress-append-200th"))
+(if (equal (nth 200 combined) 201) (print "PASS: stress-append-201st") (print "FAIL: stress-append-201st"))
 
 ; --- Set operations on larger sets ---
 (define s1 {1 2 3 4 5 6 7 8 9 10})

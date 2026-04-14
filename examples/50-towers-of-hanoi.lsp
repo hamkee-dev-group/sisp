@@ -12,7 +12,7 @@
         (t (progn
              (hanoi (+ n -1) src aux tgt)
              (define move-count (+ move-count 1))
-             (print (cat "Move " (cat (nth move-count '("1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15"))
+             (print (cat "Move " (cat (nth (+ move-count -1) '("1" "2" "3" "4" "5" "6" "7" "8" "9" "10" "11" "12" "13" "14" "15"))
                     (cat ": disk from " (cat (cond ((eq src 'a) "A")((eq src 'b) "B")(t "C"))
                     (cat " to " (cond ((eq tgt 'a) "A")((eq tgt 'b) "B")(t "C"))))))))
              (hanoi (+ n -1) aux tgt src)))))

@@ -34,7 +34,7 @@
 
 ; --- Apply permutation: perm[i] gives the image of position i ---
 (define (apply-perm perm i)
-  (nth i perm))
+  (nth (+ i -1) perm))
 
 ; --- Compose two permutations: (compose p q)[i] = p[q[i]] ---
 (define (compose p q)

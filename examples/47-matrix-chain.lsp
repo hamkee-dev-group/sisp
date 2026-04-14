@@ -25,7 +25,7 @@
 
 ; --- Get dimension from dims list ---
 (define (get-dim dims i)
-  (nth (+ i 1) dims))
+  (nth i dims))
 
 ; --- Find minimum of cost over split points ---
 (define (find-min-split dims i j best-cost)

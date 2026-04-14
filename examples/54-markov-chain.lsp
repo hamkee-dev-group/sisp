@@ -37,21 +37,21 @@
 (define s1 (step-markov 1 0 0))
 (print "t=1:") (print s1)
 
-(define s2 (step-markov (nth 1 s1) (nth 2 s1) (nth 3 s1)))
+(define s2 (step-markov (nth 0 s1) (nth 1 s1) (nth 2 s1)))
 (print "t=2:") (print s2)
 
-(define s3 (step-markov (nth 1 s2) (nth 2 s2) (nth 3 s2)))
+(define s3 (step-markov (nth 0 s2) (nth 1 s2) (nth 2 s2)))
 (print "t=3:") (print s3)
 
-(define s4 (step-markov (nth 1 s3) (nth 2 s3) (nth 3 s3)))
+(define s4 (step-markov (nth 0 s3) (nth 1 s3) (nth 2 s3)))
 (print "t=4:") (print s4)
 
 ; Verify probabilities sum to 1 at each step (exact!)
 (print "--- Probability sum = 1 (exact) ---")
-(print "t=1 sum:") (print (+ (nth 1 s1) (nth 2 s1) (nth 3 s1)))
-(print "t=2 sum:") (print (+ (nth 1 s2) (nth 2 s2) (nth 3 s2)))
-(print "t=3 sum:") (print (+ (nth 1 s3) (nth 2 s3) (nth 3 s3)))
-(print "t=4 sum:") (print (+ (nth 1 s4) (nth 2 s4) (nth 3 s4)))
+(print "t=1 sum:") (print (+ (nth 0 s1) (nth 1 s1) (nth 2 s1)))
+(print "t=2 sum:") (print (+ (nth 0 s2) (nth 1 s2) (nth 2 s2)))
+(print "t=3 sum:") (print (+ (nth 0 s3) (nth 1 s3) (nth 2 s3)))
+(print "t=4 sum:") (print (+ (nth 0 s4) (nth 1 s4) (nth 2 s4)))
 
 ; All sums are EXACTLY 1, not 0.9999999... ← impossible with floats
 
@@ -59,7 +59,7 @@
 (print "--- Starting: P(rainy)=1 ---")
 (define r1 (step-markov 0 0 1))
 (print "t=1 from rainy:") (print r1)
-(define r2 (step-markov (nth 1 r1) (nth 2 r1) (nth 3 r1)))
+(define r2 (step-markov (nth 0 r1) (nth 1 r1) (nth 2 r1)))
 (print "t=2 from rainy:") (print r2)
 
 ; Both starting points converge to same stationary distribution

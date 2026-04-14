@@ -344,19 +344,19 @@ F_nth(const struct object *args)
 	register int i;
 	n = eval(car(args));
 	p = eval(car(cdr(args)));
-	i = 1L;
+	i = 0L;
 	_ASSERTP(n->type == OBJ_INTEGER, NOT INTEGER INDEX, nth, n);
-	if (n->value.i < 1)
+	if (n->value.i < 0)
 	{
 		fprintf(stderr, "; NTH: INDEX '%ld' OUT OF BOUNDS", n->value.i);
-		return null;
+		return nil;
 	}
 	if (p == nil || p == empty)
 	{
 		return nil;
 	}
 	_ASSERTP(p->type == OBJ_CONS && !DOTPAIRP(p), NON CONS ARGUMENT, ORD, p);
-	if (n->value.i == 1)
+	if (n->value.i == 0)
 		return car(p);
 	do
 	{
@@ -364,8 +364,7 @@ F_nth(const struct object *args)
 	} while (((p = cdr(p)) != nil) && i < n->value.i);
 	if (p == nil)
 	{
-		fprintf(stderr, "; NTH: INDEX '%ld' OUT OF BOUNDS", n->value.i);
-		return null;
+		return nil;
 	}
 	return car(p);
 }
