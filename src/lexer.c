@@ -150,7 +150,13 @@ int gettoken(void)
 				{
 					XUNGETC(next);
 					p = token_buffer;
-					*p++ = c;
+					do
+					{
+						CHECK_TOKEN_SIZE;
+						*p++ = tolower(c);
+						c = XGETC();
+					} while (isalnum(c) || strchr("*+/<=>-_#", c) != NULL);
+					XUNGETC(c);
 					*p = '\0';
 					return IDENTIFIER;
 				}
@@ -175,7 +181,13 @@ int gettoken(void)
 				CHECK_TOKEN_SIZE;
 				*p++ = c;
 				c = XGETC();
-				if (c != '-' && !isdigit(c))
+				if (c == '-')
+				{
+					CHECK_TOKEN_SIZE;
+					*p++ = c;
+					c = XGETC();
+				}
+				if (!isdigit(c))
 				{
 					CLEAN_BUFFER;
 				}
