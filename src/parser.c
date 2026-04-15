@@ -23,7 +23,11 @@ __inline__ static objectp parse_form(void)
 				longjmp(jb, 1);
 			prev->value.c.cdr = parse_object(1);
 			if ((thistoken = gettoken()) != ')')
+			{
+				if (thistoken == EOF)
+					fprintf(stderr, "; UNTERMINATED LIST AT EOF\n");
 				longjmp(jb, 1);
+			}
 			break;
 		}
 		p = new_object(OBJ_CONS);
@@ -33,6 +37,11 @@ __inline__ static objectp parse_form(void)
 			prev->value.c.cdr = p;
 		p->value.c.car = parse_object(1);
 		prev = p;
+	}
+	if (thistoken == EOF)
+	{
+		fprintf(stderr, "; UNTERMINATED LIST AT EOF\n");
+		longjmp(jb, 1);
 	}
 	// this is for '()
 	return (first == NULL) ? null : first;
@@ -52,7 +61,11 @@ __inline__ static objectp parse_set(void)
 				longjmp(jb, 1);
 			prev->value.c.cdr = parse_object(1);
 			if ((thistoken = gettoken()) != '}')
+			{
+				if (thistoken == EOF)
+					fprintf(stderr, "; UNTERMINATED SET AT EOF\n");
 				longjmp(jb, 1);
+			}
 			break;
 		}
 		p = new_object(OBJ_SET);
@@ -62,6 +75,11 @@ __inline__ static objectp parse_set(void)
 			prev->value.c.cdr = p;
 		p->value.c.car = parse_object(1);
 		prev = p;
+	}
+	if (thistoken == EOF)
+	{
+		fprintf(stderr, "; UNTERMINATED SET AT EOF\n");
+		longjmp(jb, 1);
 	}
 	// this is for '()
 	return (first == NULL) ? empty : first;

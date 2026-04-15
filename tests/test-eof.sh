@@ -54,6 +54,31 @@ run_test "parse-error-eof" ")" 0 ""
 run_test "multi-expr-eof" "(+ 1 2)
 (* 3 4)" 0 "PARSER ERROR"
 
+# --- Unterminated delimiter tests ---
+
+run_test_match() {
+    local name="$1"
+    local input="$2"
+    local expect_pattern="$3"
+
+    output=$(printf '%s' "$input" | timeout 3s "$SISP" 2>&1)
+
+    if ! echo "$output" | grep -q "$expect_pattern"; then
+        echo "FAIL: $name (expected '$expect_pattern' in output)"
+        FAIL=$((FAIL + 1))
+        return
+    fi
+
+    echo "PASS: $name"
+    PASS=$((PASS + 1))
+}
+
+run_test_match "unterminated-list-eof" "(print '(1 2" "UNTERMINATED LIST"
+run_test_match "unterminated-empty-list-eof" "(" "UNTERMINATED LIST"
+run_test_match "unterminated-set-eof" "(print {1 2" "UNTERMINATED SET"
+run_test_match "unterminated-empty-set-eof" "{" "UNTERMINATED SET"
+run_test_match "unterminated-dotted-eof" "(print '(1 . 2" "UNTERMINATED LIST"
+
 echo ""
 echo "PASSED: $PASS"
 echo "FAILED: $FAIL"

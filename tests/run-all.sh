@@ -35,7 +35,7 @@ for test_file in "$SCRIPT_DIR"/test-*.lsp; do
 done
 
 # Shell-level regression tests
-for sh_test in test-dump.sh test-load.sh test-lazy.sh test-reducers.sh test-signed-tokens.sh; do
+for sh_test in test-dump.sh test-load.sh test-lazy.sh test-reducers.sh test-signed-tokens.sh test-eof.sh; do
     echo ""
     echo "========================================"
     echo "Running: $sh_test"
