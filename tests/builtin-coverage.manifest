@@ -1,0 +1,98 @@
+# Builtin Coverage Manifest
+#
+# Maps each registered builtin from src/funcs.c functions[] to the test
+# file(s) that exercise it.  The audit script (audit-coverage.sh) extracts
+# every builtin name from functions[] and verifies each one appears here.
+#
+# Format:  BUILTIN  TEST-FILE[,TEST-FILE...]
+#          or:  BUILTIN  EXCEPTION  reason text
+#
+# An EXCEPTION entry documents a builtin that is intentionally not tested
+# directly.  The reason must be non-empty.
+
+*           test-arithmetic.lsp,test-reducers.sh
++           test-arithmetic.lsp,test-reducers.sh
+-           test-arithmetic.lsp,test-signed-tokens.sh
+/           test-arithmetic.lsp,test-reducers.sh
+/=          test-reducers.sh
+<           test-comparison.lsp
+<=          test-comparison.lsp
+<=>         test-boolean.lsp
+=           test-comparison.lsp,test-equality.lsp
+=>          test-boolean.lsp
+>           test-comparison.lsp
+>=          test-comparison.lsp
+\           test-sets.lsp
+^           test-arithmetic.lsp
+and         test-boolean.lsp
+append      test-lists.lsp
+assoc       test-lists.lsp
+atom        test-types.lsp
+atomp       test-types.lsp
+bquote      test-quote-bquote.lsp
+cap         test-sets.lsp
+car         test-lists.lsp
+cat         test-strings.lsp
+cdr         test-lists.lsp
+comma       test-quote-bquote.lsp
+comp        test-sets.lsp
+cond        test-control.lsp
+cons        test-lists.lsp
+consp       test-types.lsp
+define      test-definitions.lsp
+defmacro    test-definitions.lsp
+defun       test-definitions.lsp
+diff        test-sets.lsp
+dump        test-dump.sh,test-side-effects.sh
+endp        test-types.lsp
+eq          test-equality.lsp
+eql         test-equality.lsp
+equal       test-equality.lsp
+equalp      test-equality.lsp
+eval        test-edge-cases.lsp
+evlis       test-lists.lsp
+gc          test-side-effects.sh
+if          test-control.lsp
+in          test-sets.lsp,test-comprehension.lsp
+labels      test-definitions.lsp
+lazy        test-lazy.sh
+let         test-definitions.lsp
+let*        test-definitions.lsp
+list        test-lists.lsp
+listp       test-types.lsp
+load        test-load.sh
+macroexpand-1  test-definitions.lsp
+map         test-lists.lsp,test-reducers.sh
+memberp     test-sets.lsp
+mod         test-arithmetic.lsp
+not         test-boolean.lsp
+notin       test-sets.lsp
+nth         test-lists.lsp
+null        test-types.lsp
+numberp     test-types.lsp
+or          test-boolean.lsp
+ord         test-lists.lsp,test-sets.lsp
+par         test-sets.lsp
+pop         test-lists.lsp
+pow         test-sets.lsp,test-comprehension.lsp
+print       test-side-effects.sh
+prod        test-sets.lsp
+prog1       test-control.lsp
+prog2       test-control.lsp
+progn       test-control.lsp
+push        test-lists.lsp
+quit        EXCEPTION  implicitly tested by every test via (quit 0); direct coverage impractical
+quote       test-quote-bquote.lsp
+seq         test-lists.lsp
+setq        test-definitions.lsp
+sisp-equal  test-equality.lsp
+strlen      test-strings.lsp
+subset      test-sets.lsp
+subst       test-lists.lsp
+substr      test-strings.lsp
+symbolp     test-types.lsp
+symdiff     test-sets.lsp
+typeof      test-types.lsp
+undef       test-definitions.lsp
+union       test-sets.lsp
+xor         test-boolean.lsp
