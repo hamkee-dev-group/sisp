@@ -124,6 +124,18 @@
 
 (undef u1 u2 c1 c2 d1 d2 s1 s2)
 
+; --- List membership in comprehension sets ---
+(define lists-ok {tau : (equal tau '(1))})
+(if (equal (in '(1) lists-ok) t) (print "PASS: comp-singleton-list") (print "FAIL: comp-singleton-list"))
+(if (equal (in '(2) lists-ok) nil) (print "PASS: comp-singleton-list-miss") (print "FAIL: comp-singleton-list-miss"))
+(if (equal (in 1 lists-ok) nil) (print "PASS: comp-singleton-list-atom") (print "FAIL: comp-singleton-list-atom"))
+
+(define lists2 {tau : (equal tau '(1 2))})
+(if (equal (in '(1 2) lists2) t) (print "PASS: comp-multi-list") (print "FAIL: comp-multi-list"))
+(if (equal (in '(1 3) lists2) nil) (print "PASS: comp-multi-list-miss") (print "FAIL: comp-multi-list-miss"))
+
+(undef lists-ok lists2)
+
 ; cleanup
 (undef evens pos small-pos neg nonzero big big-even not-evens pos-odd A B sd cp pw)
 

@@ -769,18 +769,11 @@ F_member(const struct object *args)
 	{
 		if (m->type == OBJ_CONS)
 		{
-			if (m->vcdr != nil)
-			{
-				tv = new_object(OBJ_CONS);
-				tv->vcar = new_object(OBJ_IDENTIFIER);
-				tv->vcar->value.id = strdup("quote");
-				tv->vcdr = new_object(OBJ_CONS);
-				tv->vcdr->vcar = m;
-			}
-			else
-			{
-				tv = m->vcar;
-			}
+			tv = new_object(OBJ_CONS);
+			tv->vcar = new_object(OBJ_IDENTIFIER);
+			tv->vcar->value.id = strdup("quote");
+			tv->vcdr = new_object(OBJ_CONS);
+			tv->vcdr->vcar = m;
 		}
 		else
 		{
