@@ -110,23 +110,15 @@ eqset(objectp a, objectp b)
 		found = -1;
 		do
 		{
-			if (a->vcar->type == tmp->vcar->type)
+			if (ISNUMERIC(a->vcar) && ISNUMERIC(tmp->vcar))
+			{
+				if (cmp_numeric(a->vcar, tmp->vcar) == 0)
+					found = 1;
+			}
+			else if (a->vcar->type == tmp->vcar->type)
 			{
 				switch (a->vcar->type)
 				{
-				case OBJ_INTEGER:
-					if (a->vcar->value.i == tmp->vcar->value.i)
-					{
-						found = 1;
-					}
-					break;
-				case OBJ_RATIONAL:
-					if (a->vcar->value.r.n == tmp->vcar->value.r.n &&
-						a->vcar->value.r.d == tmp->vcar->value.r.d)
-					{
-						found = 1;
-					}
-					break;
 				case OBJ_T:
 				case OBJ_NIL:
 				case OBJ_TAU:
@@ -431,6 +423,12 @@ int in_set(objectp x, objectp y)
 	do
 	{
 		p = car(y);
+		if (ISNUMERIC(x) && ISNUMERIC(p))
+		{
+			if (cmp_numeric(x, p) == 0)
+				return 1;
+			continue;
+		}
 		if (x->type != p->type)
 			continue;
 		switch (x->type)
@@ -449,15 +447,6 @@ int in_set(objectp x, objectp y)
 			break;
 		case OBJ_STRING:
 			if (!strcmp(x->value.s.str, p->value.s.str))
-				return 1;
-			break;
-		case OBJ_INTEGER:
-			if (x->value.i == p->value.i)
-				return 1;
-			break;
-		case OBJ_RATIONAL:
-			if (x->value.r.d == p->value.r.d &&
-				x->value.r.n == p->value.r.n)
 				return 1;
 			break;
 		case OBJ_CONS:

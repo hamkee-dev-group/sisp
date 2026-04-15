@@ -538,6 +538,8 @@ eval_set(const struct object *p)
 	do
 	{
 		p1 = p->value.c.car;
+		if (p1->type == OBJ_RATIONAL)
+			p1 = eval_rat(p1);
 		if (!in_set(p1, first))
 		{
 			r = new_object(OBJ_SET);

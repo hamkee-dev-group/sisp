@@ -134,6 +134,28 @@
 
 (undef pos evens)
 
+; --- Rational canonicalization in sets ---
+; Equivalent rationals deduplicate
+(if (equal {1/2 2/4} {1/2}) (print "PASS: rat-dedup-half") (print "FAIL: rat-dedup-half"))
+(if (equal {3/6 1/2} {1/2}) (print "PASS: rat-dedup-sixth") (print "FAIL: rat-dedup-sixth"))
+; Rationals reducing to integer deduplicate with integers
+(if (equal {3/3 1} {1}) (print "PASS: rat-dedup-int") (print "FAIL: rat-dedup-int"))
+; equal works for sets with equivalent rationals
+(if (equal {1/2} {2/4}) (print "PASS: rat-equal-set") (print "FAIL: rat-equal-set"))
+; in finds equivalent rationals
+(if (equal (in 1/2 {2/4 3/4}) t) (print "PASS: rat-in-equiv") (print "FAIL: rat-in-equiv"))
+(if (equal (in 2/4 {1/2 3/4}) t) (print "PASS: rat-in-equiv2") (print "FAIL: rat-in-equiv2"))
+; subset with equivalent rationals
+(if (equal (subset {2/4} {1/2 3/4}) t) (print "PASS: rat-subset") (print "FAIL: rat-subset"))
+; union deduplicates equivalent rationals
+(if (equal (union {1/2} {2/4}) {1/2}) (print "PASS: rat-union") (print "FAIL: rat-union"))
+; cap finds equivalent rationals
+(if (equal (cap {1/2 3/4} {2/4 5/6}) {1/2}) (print "PASS: rat-cap") (print "FAIL: rat-cap"))
+; diff removes equivalent rationals
+(if (equal (diff {1/2 3/4} {2/4}) {3/4}) (print "PASS: rat-diff") (print "FAIL: rat-diff"))
+; symdiff with equivalent rationals
+(if (equal (symdiff {1/2 3/4} {2/4 5/6}) {3/4 5/6}) (print "PASS: rat-symdiff") (print "FAIL: rat-symdiff"))
+
 ; cleanup
 (undef ps ps3 cp mixed nested A compA)
 

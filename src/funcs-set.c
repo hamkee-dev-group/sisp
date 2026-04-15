@@ -159,23 +159,15 @@ F_symdiff(const struct object *args)
 		found = 0;
 		do
 		{
-			if (arg1->vcar->type == tmp->vcar->type)
+			if (ISNUMERIC(arg1->vcar) && ISNUMERIC(tmp->vcar))
+			{
+				if (cmp_numeric(arg1->vcar, tmp->vcar) == 0)
+					found = 1;
+			}
+			else if (arg1->vcar->type == tmp->vcar->type)
 			{
 				switch (arg1->vcar->type)
 				{
-				case OBJ_INTEGER:
-					if (arg1->vcar->value.i == tmp->vcar->value.i)
-					{
-						found = 1;
-					}
-					break;
-				case OBJ_RATIONAL:
-					if (arg1->vcar->value.r.n == tmp->vcar->value.r.n &&
-						arg1->vcar->value.r.d == tmp->vcar->value.r.d)
-					{
-						found = 1;
-					}
-					break;
 				case OBJ_T:
 				case OBJ_NIL:
 				case OBJ_TAU:
@@ -226,23 +218,15 @@ F_symdiff(const struct object *args)
 		found = 0;
 		do
 		{
-			if (arg2->vcar->type == tmp->vcar->type)
+			if (ISNUMERIC(arg2->vcar) && ISNUMERIC(tmp->vcar))
+			{
+				if (cmp_numeric(arg2->vcar, tmp->vcar) == 0)
+					found = 1;
+			}
+			else if (arg2->vcar->type == tmp->vcar->type)
 			{
 				switch (arg2->vcar->type)
 				{
-				case OBJ_INTEGER:
-					if (arg2->vcar->value.i == tmp->vcar->value.i)
-					{
-						found = 1;
-					}
-					break;
-				case OBJ_RATIONAL:
-					if (arg2->vcar->value.r.n == tmp->vcar->value.r.n &&
-						arg2->vcar->value.r.d == tmp->vcar->value.r.d)
-					{
-						found = 1;
-					}
-					break;
 				case OBJ_T:
 				case OBJ_NIL:
 				case OBJ_TAU:
@@ -550,38 +534,23 @@ F_cap(const struct object *args)
 		tmp = arg2;
 		do
 		{
-			if (arg1->vcar->type == tmp->vcar->type)
+			if (ISNUMERIC(arg1->vcar) && ISNUMERIC(tmp->vcar))
+			{
+				if (cmp_numeric(arg1->vcar, tmp->vcar) == 0)
+				{
+					p1 = new_object(type);
+					p1->vcar = arg1->vcar;
+					if (first == NULL)
+						first = p1;
+					if (prev != NULL)
+						prev->vcdr = p1;
+					prev = p1;
+				}
+			}
+			else if (arg1->vcar->type == tmp->vcar->type)
 			{
 				switch (arg1->vcar->type)
 				{
-				case OBJ_INTEGER:
-					if (arg1->vcar->value.i == tmp->vcar->value.i)
-					{
-						p1 = new_object(type);
-						p1->vcar = new_object(OBJ_INTEGER);
-						p1->vcar->value.i = arg1->vcar->value.i;
-						if (first == NULL)
-							first = p1;
-						if (prev != NULL)
-							prev->vcdr = p1;
-						prev = p1;
-					}
-					break;
-				case OBJ_RATIONAL:
-					if (arg1->vcar->value.r.n == tmp->vcar->value.r.n &&
-						arg1->vcar->value.r.d == tmp->vcar->value.r.d)
-					{
-						p1 = new_object(type);
-						p1->vcar = new_object(OBJ_RATIONAL);
-						p1->vcar->value.r.n = arg1->vcar->value.r.n;
-						p1->vcar->value.r.d = arg1->vcar->value.r.d;
-						if (first == NULL)
-							first = p1;
-						if (prev != NULL)
-							prev->vcdr = p1;
-						prev = p1;
-					}
-					break;
 				case OBJ_T:
 				case OBJ_NIL:
 				case OBJ_TAU:
@@ -663,23 +632,15 @@ F_diff(const struct object *args)
 		found = 0;
 		do
 		{
-			if (arg1->vcar->type == tmp->vcar->type)
+			if (ISNUMERIC(arg1->vcar) && ISNUMERIC(tmp->vcar))
+			{
+				if (cmp_numeric(arg1->vcar, tmp->vcar) == 0)
+					found = 1;
+			}
+			else if (arg1->vcar->type == tmp->vcar->type)
 			{
 				switch (arg1->vcar->type)
 				{
-				case OBJ_INTEGER:
-					if (arg1->vcar->value.i == tmp->vcar->value.i)
-					{
-						found = 1;
-					}
-					break;
-				case OBJ_RATIONAL:
-					if (arg1->vcar->value.r.n == tmp->vcar->value.r.n &&
-						arg1->vcar->value.r.d == tmp->vcar->value.r.d)
-					{
-						found = 1;
-					}
-					break;
 				case OBJ_T:
 				case OBJ_NIL:
 				case OBJ_TAU:
