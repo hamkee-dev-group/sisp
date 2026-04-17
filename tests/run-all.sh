@@ -35,12 +35,12 @@ for test_file in "$SCRIPT_DIR"/test-*.lsp; do
 done
 
 # Shell-level regression tests
-for sh_test in test-dump.sh test-load.sh test-lazy.sh test-side-effects.sh test-reducers.sh test-signed-tokens.sh test-eof.sh audit-coverage.sh; do
+for sh_test in "$SCRIPT_DIR"/test-*.sh "$SCRIPT_DIR"/audit-coverage.sh; do
     echo ""
     echo "========================================"
-    echo "Running: $sh_test"
+    echo "Running: $(basename "$sh_test")"
     echo "========================================"
-    output=$(cd "$SCRIPT_DIR" && bash "$SCRIPT_DIR/$sh_test" 2>&1)
+    output=$(cd "$SCRIPT_DIR" && bash "$sh_test" 2>&1)
     status=$?
     echo "$output"
 
@@ -50,7 +50,7 @@ for sh_test in test-dump.sh test-load.sh test-lazy.sh test-side-effects.sh test-
     FAIL=$((FAIL + f))
 
     if [ $status -ne 0 ]; then
-        echo "*** $sh_test exited with status $status ***"
+        echo "*** $(basename "$sh_test") exited with status $status ***"
         ERRORS=$((ERRORS + 1))
     fi
 done
