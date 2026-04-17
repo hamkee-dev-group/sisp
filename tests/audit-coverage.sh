@@ -53,10 +53,21 @@ while IFS= read -r entry; do
 done <<< "$manifest_names"
 
 # 3. Non-exception entries must reference existing test files.
+#    EXCEPTION entries must carry a non-empty reason.
 while IFS= read -r line; do
     name=$(echo "$line" | awk '{print $1}')
     second=$(echo "$line" | awk '{print $2}')
-    [ "$second" = "EXCEPTION" ] && continue
+    if [ "$second" = "EXCEPTION" ]; then
+        reason=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s",$i,(i<NF?OFS:"")}')
+        if [ -z "$reason" ]; then
+            echo "FAIL: '$name' EXCEPTION entry has empty reason"
+            FAIL=$((FAIL + 1))
+        else
+            echo "PASS: '$name' EXCEPTION documented"
+            PASS=$((PASS + 1))
+        fi
+        continue
+    fi
     files=$(echo "$line" | awk '{print $2}')
     IFS=',' read -ra file_list <<< "$files"
     for f in "${file_list[@]}"; do
