@@ -210,6 +210,35 @@
 (if (equal (ord {{tau : (> tau 0)} {tau : (> tau 0)}}) 1) (print "PASS: nested-comp-dedup") (print "FAIL: nested-comp-dedup"))
 (if (equal {{tau : (> tau 0)} {tau : (> tau 0)}} {{tau : (> tau 0)}}) (print "PASS: nested-comp-dedup-equal") (print "FAIL: nested-comp-dedup-equal"))
 
+; --- CL-friendly set predicates ---
+(if (equal (setp {1 2 3}) t) (print "PASS: setp-ext") (print "FAIL: setp-ext"))
+(if (equal (setp {tau : (> tau 0)}) t) (print "PASS: setp-comp") (print "FAIL: setp-comp"))
+(if (equal (setp '(1 2 3)) nil) (print "PASS: setp-list") (print "FAIL: setp-list"))
+(if (equal (setp 42) nil) (print "PASS: setp-int") (print "FAIL: setp-int"))
+(if (equal (setp nil) nil) (print "PASS: setp-nil") (print "FAIL: setp-nil"))
+
+(if (equal (ext-set-p {1 2 3}) t) (print "PASS: ext-set-p-ext") (print "FAIL: ext-set-p-ext"))
+(if (equal (ext-set-p {tau : (> tau 0)}) nil) (print "PASS: ext-set-p-comp") (print "FAIL: ext-set-p-comp"))
+(if (equal (ext-set-p '(1 2 3)) nil) (print "PASS: ext-set-p-list") (print "FAIL: ext-set-p-list"))
+
+(if (equal (comp-set-p {tau : (> tau 0)}) t) (print "PASS: comp-set-p-comp") (print "FAIL: comp-set-p-comp"))
+(if (equal (comp-set-p {1 2 3}) nil) (print "PASS: comp-set-p-ext") (print "FAIL: comp-set-p-ext"))
+(if (equal (comp-set-p '(1 2 3)) nil) (print "PASS: comp-set-p-list") (print "FAIL: comp-set-p-list"))
+
+; --- CL-friendly aliases for existing set operators ---
+(if (equal (intersection {1 2 3} {2 3 4}) (cap {1 2 3} {2 3 4})) (print "PASS: intersection-alias") (print "FAIL: intersection-alias"))
+(if (equal (set-difference {1 2 3} {2}) (diff {1 2 3} {2})) (print "PASS: set-difference-alias") (print "FAIL: set-difference-alias"))
+(if (equal (symmetric-difference {1 2 3} {2 3 4}) (symdiff {1 2 3} {2 3 4})) (print "PASS: symmetric-difference-alias") (print "FAIL: symmetric-difference-alias"))
+(define alias-ps (powerset {1 2}))
+(if (equal (ord alias-ps) (ord (pow {1 2}))) (print "PASS: powerset-alias-card") (print "FAIL: powerset-alias-card"))
+(if (equal (in {1 2} alias-ps 'equal) t) (print "PASS: powerset-alias-member") (print "FAIL: powerset-alias-member"))
+(undef alias-ps)
+(if (equal (cartesian-product {1 2} {3 4}) (prod {1 2} {3 4})) (print "PASS: cartesian-product-alias") (print "FAIL: cartesian-product-alias"))
+(define aliasA {tau : (and (> tau 0) (< tau 10))})
+(if (equal (in -1 (complement aliasA)) (in -1 (comp aliasA))) (print "PASS: complement-alias") (print "FAIL: complement-alias"))
+(if (equal (in 5 (complement aliasA)) (in 5 (comp aliasA))) (print "PASS: complement-alias-nonmember") (print "FAIL: complement-alias-nonmember"))
+(undef aliasA)
+
 ; cleanup
 (undef ps ps3 cp mixed nested A compA)
 

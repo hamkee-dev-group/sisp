@@ -215,6 +215,34 @@ F_endp(const struct object *args)
 }
 
 objectp
+F_setp(const struct object *args)
+{
+	if (eval(car(args))->type == OBJ_SET)
+		return t;
+	return nil;
+}
+
+objectp
+F_ext_set_p(const struct object *args)
+{
+	objectp p;
+	p = eval(car(args));
+	if (p->type == OBJ_SET && !COMPSET(p))
+		return t;
+	return nil;
+}
+
+objectp
+F_comp_set_p(const struct object *args)
+{
+	objectp p;
+	p = eval(car(args));
+	if (p->type == OBJ_SET && COMPSET(p))
+		return t;
+	return nil;
+}
+
+objectp
 F_loadfile(const struct object *args)
 {
 	objectp p;
@@ -1134,10 +1162,13 @@ const funcs functions[] = {
 	{"bquote", F_bquote},
 	{"cap", F_cap},
 	{"car", F_car},
+	{"cartesian-product", F_setprod},
 	{"cat", F_cat},
 	{"cdr", F_cdr},
 	{"comma", F_comma},
 	{"comp", F_complement},
+	{"comp-set-p", F_comp_set_p},
+	{"complement", F_complement},
 	{"cond", F_cond},
 	{"cons", F_cons},
 	{"consp", F_consp},
@@ -1153,10 +1184,12 @@ const funcs functions[] = {
 	{"equalp", F_equalp},
 	{"eval", F_eval},
 	{"evlis", F_evlis},
+	{"ext-set-p", F_ext_set_p},
 	{"funcall", F_funcall},
 	{"gc", F_gc},
 	{"if", F_if},
 	{"in", F_member},
+	{"intersection", F_cap},
 	{"labels", F_labels},
 	{"lazy", F_lazy},
 	{"let", F_let},
@@ -1179,6 +1212,7 @@ const funcs functions[] = {
 	{"par", F_pair},
 	{"pop", F_pop},
 	{"pow", F_powerset},
+	{"powerset", F_powerset},
 	{"print", F_print},
 	{"prod", F_setprod},
 	{"prog1", F_prog1},
@@ -1188,6 +1222,8 @@ const funcs functions[] = {
 	{"quit", F_quit},
 	{"quote", F_quote},
 	{"seq", F_seq},
+	{"set-difference", F_diff},
+	{"setp", F_setp},
 	{"setq", F_setq_alias},
 	{"sisp-equal", F_equal},
 	{"strlen", F_strlen},
@@ -1196,6 +1232,7 @@ const funcs functions[] = {
 	{"substr", F_substr},
 	{"symbolp", F_symbolp},
 	{"symdiff", F_symdiff},
+	{"symmetric-difference", F_symdiff},
 	{"typeof", F_typeof},
 	{"undef", F_undef},
 	{"union", F_union},

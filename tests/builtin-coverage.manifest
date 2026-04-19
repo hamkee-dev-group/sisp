@@ -32,10 +32,13 @@ atomp       test-types.lsp
 bquote      test-quote-bquote.lsp
 cap         test-sets.lsp
 car         test-lists.lsp
+cartesian-product  test-sets.lsp
 cat         test-strings.lsp
 cdr         test-lists.lsp
 comma       test-quote-bquote.lsp
 comp        test-sets.lsp
+comp-set-p  test-sets.lsp
+complement  test-sets.lsp
 cond        test-control.lsp
 cons        test-lists.lsp
 consp       test-types.lsp
@@ -51,10 +54,12 @@ equal       test-equality.lsp
 equalp      test-equality.lsp
 eval        test-edge-cases.lsp
 evlis       test-lists.lsp
+ext-set-p   test-sets.lsp
 funcall     test-definitions.lsp
 gc          test-side-effects.sh
 if          test-control.lsp
 in          test-sets.lsp,test-comprehension.lsp
+intersection  test-sets.lsp
 labels      test-definitions.lsp
 lazy        test-lazy.sh
 let         test-definitions.lsp
@@ -77,6 +82,7 @@ ord         test-lists.lsp,test-sets.lsp
 par         test-sets.lsp
 pop         test-lists.lsp
 pow         test-sets.lsp,test-comprehension.lsp
+powerset    test-sets.lsp
 print       test-side-effects.sh
 prod        test-sets.lsp
 prog1       test-control.lsp
@@ -86,6 +92,8 @@ push        test-lists.lsp
 quit        EXCEPTION  implicitly tested by every test via (quit 0); direct coverage impractical
 quote       test-quote-bquote.lsp
 seq         test-lists.lsp
+set-difference  test-sets.lsp
+setp        test-sets.lsp
 setq        test-definitions.lsp
 sisp-equal  test-equality.lsp
 strlen      test-strings.lsp
@@ -94,6 +102,7 @@ subst       test-lists.lsp
 substr      test-strings.lsp
 symbolp     test-types.lsp
 symdiff     test-sets.lsp
+symmetric-difference  test-sets.lsp
 typeof      test-types.lsp
 undef       test-definitions.lsp
 union       test-sets.lsp
