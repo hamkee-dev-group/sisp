@@ -4,6 +4,7 @@
 #define RATIONAL    6
 #define STRING      7
 #define SET         8
+#define COMMA_AT    9
 
 #define OBJ_SIZE sizeof(struct object)
 

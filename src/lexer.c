@@ -71,14 +71,12 @@ int gettoken(void)
 		{
 		case ',':
 			c = XGETC();
+			if (c == '@')
+				return COMMA_AT;
 			if (c == ')')
 				CLEAN_BUFFER;
-			else
-			{
-				XUNGETC(c);
-				c = ',';
-				return c;
-			}
+			XUNGETC(c);
+			return ',';
 		case '`':
 			c = XGETC();
 			if (c == ')')

@@ -8,6 +8,12 @@
 #include "extern.h"
 #include "misc.h"
 static int thistoken;
+static int bquote_depth = 0;
+
+void parser_reset_state(void)
+{
+	bquote_depth = 0;
+}
 
 __inline__ static objectp parse_form(void)
 {
@@ -108,16 +114,35 @@ parse_object(int havetoken)
 	case EOF:
 		return (objectp)NULL;
 	case '`':
+		bquote_depth++;
 		p = new_object(OBJ_CONS);
 		p->value.c.car = new_object(OBJ_IDENTIFIER);
 		p->value.c.car->value.id = strdup("bquote");
 		p->value.c.cdr = new_object(OBJ_CONS);
 		p->value.c.cdr->value.c.car = parse_object(0);
+		bquote_depth--;
 		break;
 	case ',':
+		if (bquote_depth <= 0)
+		{
+			fprintf(stderr, "; COMMA OUTSIDE BACKQUOTE\n");
+			longjmp(jb, 1);
+		}
 		p = new_object(OBJ_CONS);
 		p->value.c.car = new_object(OBJ_IDENTIFIER);
 		p->value.c.car->value.id = strdup("comma");
+		p->value.c.cdr = new_object(OBJ_CONS);
+		p->value.c.cdr->value.c.car = parse_object(0);
+		break;
+	case COMMA_AT:
+		if (bquote_depth <= 0)
+		{
+			fprintf(stderr, "; COMMA-AT OUTSIDE BACKQUOTE\n");
+			longjmp(jb, 1);
+		}
+		p = new_object(OBJ_CONS);
+		p->value.c.car = new_object(OBJ_IDENTIFIER);
+		p->value.c.car->value.id = strdup("comma-at");
 		p->value.c.cdr = new_object(OBJ_CONS);
 		p->value.c.cdr->value.c.car = parse_object(0);
 		break;

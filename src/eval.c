@@ -395,11 +395,29 @@ eval_func(objectp p, objectp args)
 objectp
 eval_bquote(objectp args)
 {
-	objectp p1, r, first, prev;
+	objectp p1, r, first, prev, spliced;
 	first = prev = NULL;
 	do
 	{
 		p1 = car(args);
+		if (p1->type == OBJ_CONS && car(p1)->type == OBJ_IDENTIFIER
+			&& !strcmp(car(p1)->value.id, "comma-at"))
+		{
+			spliced = eval(cadr(p1));
+			while (spliced != nil)
+			{
+				_ASSERTP(spliced->type == OBJ_CONS, NOT A LIST, SPLICE, spliced);
+				r = new_object(OBJ_CONS);
+				r->vcar = car(spliced);
+				if (first == NULL)
+					first = r;
+				if (prev != NULL)
+					prev->vcdr = r;
+				prev = r;
+				spliced = cdr(spliced);
+			}
+			continue;
+		}
 		r = new_object(OBJ_CONS);
 		if (p1->type == OBJ_CONS)
 			r->vcar = eval_bquote(p1);

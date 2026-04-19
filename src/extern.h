@@ -38,6 +38,7 @@ extern void garbage_collect(void);
 extern void dump_object(int);
 /* parser.c */
 extern objectp parse_object(int);
+extern void parser_reset_state(void);
 /* lexer.c */
 extern void process_input(const char *);
 extern  void process_file(void);

@@ -30,7 +30,27 @@
 ; backquote with identifier (returns as-is)
 (if (equal `a 'a) (print "PASS: bquote-identifier") (print "FAIL: bquote-identifier"))
 
+; --- splicing with ,@ ---
+(define lst '(2 3 4))
+(if (equal `(1 ,@lst 5) '(1 2 3 4 5)) (print "PASS: bquote-splice-mid") (print "FAIL: bquote-splice-mid"))
+(if (equal `(,@lst 5) '(2 3 4 5)) (print "PASS: bquote-splice-head") (print "FAIL: bquote-splice-head"))
+(if (equal `(1 ,@lst) '(1 2 3 4)) (print "PASS: bquote-splice-tail") (print "FAIL: bquote-splice-tail"))
+(if (equal `(,@lst) '(2 3 4)) (print "PASS: bquote-splice-only") (print "FAIL: bquote-splice-only"))
+(if (equal `(,@lst ,@lst) '(2 3 4 2 3 4)) (print "PASS: bquote-splice-twice") (print "FAIL: bquote-splice-twice"))
+
+; splicing nil contributes no elements
+(if (equal `(1 ,@nil 2) '(1 2)) (print "PASS: bquote-splice-nil") (print "FAIL: bquote-splice-nil"))
+
+; splice mixed with regular comma
+(if (equal `(,x ,@lst ,y) '(10 2 3 4 20)) (print "PASS: bquote-splice-mixed") (print "FAIL: bquote-splice-mixed"))
+
+; splice an expression
+(if (equal `(0 ,@(list 1 2) 3) '(0 1 2 3)) (print "PASS: bquote-splice-expr") (print "FAIL: bquote-splice-expr"))
+
+; splicing inside a nested list preserves outer structure
+(if (equal `(a (b ,@lst) c) '(a (b 2 3 4) c)) (print "PASS: bquote-splice-nested") (print "FAIL: bquote-splice-nested"))
+
 ; cleanup
-(undef myvar x y)
+(undef myvar x y lst)
 
 (print "=== QUOTE/BQUOTE TESTS DONE ===")

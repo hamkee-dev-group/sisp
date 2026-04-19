@@ -24,7 +24,7 @@ void process_file(void)
 	init_lex();
 	while (true)
 	{
-		p = (!setjmp(jb)) ? parse_object(0) : NULL;
+		p = (!setjmp(jb)) ? parse_object(0) : (parser_reset_state(), (objectp)NULL);
 		done_lex();
 		if (p != NULL)
 		{
@@ -52,7 +52,7 @@ process_stdin(void)
 		if (feof(input_file))
 			break;
 		printf(": ");
-		p = (!setjmp(jb)) ? parse_object(0) : NULL;
+		p = (!setjmp(jb)) ? parse_object(0) : (parser_reset_state(), (objectp)NULL);
 		done_lex();
 		if (p != NULL)
 		{
