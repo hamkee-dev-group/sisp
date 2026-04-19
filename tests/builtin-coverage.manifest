@@ -51,6 +51,7 @@ equal       test-equality.lsp
 equalp      test-equality.lsp
 eval        test-edge-cases.lsp
 evlis       test-lists.lsp
+funcall     test-definitions.lsp
 gc          test-side-effects.sh
 if          test-control.lsp
 in          test-sets.lsp,test-comprehension.lsp

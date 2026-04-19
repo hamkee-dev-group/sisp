@@ -422,6 +422,27 @@ eval_bquote(objectp args)
 	return first;
 }
 
+objectp
+apply_function(objectp fn, objectp args, const char *name)
+{
+	objectp params;
+	unsigned long n_args;
+
+	_ASSERTP(fn->type == OBJ_CONS && fn->vcar->type == OBJ_IDENTIFIER &&
+				 (!strcmp(fn->vcar->value.id, "lambda") ||
+				  !strcmp(fn->vcar->value.id, "closure")),
+			 NOT A FUNCTION, EVAL, fn);
+
+	params = is_closure(fn) ? car(cddr(fn)) : cadr(fn);
+	if (card(args) != (n_args = card(params)))
+	{
+		fprintf(stderr, "; %s: EXPECTED %lu ARGUMENTS.", name, n_args);
+		longjmp(je, 1);
+	}
+	return (lazy_eval == true) ? eval_func_lazy(fn, args)
+							   : eval_func(fn, args);
+}
+
 static unsigned int rbp = 0;
 objectp
 eval_cons(const struct object *p)
@@ -430,6 +451,9 @@ eval_cons(const struct object *p)
 	objectp func_name, q, params;
 	funcs key, *item;
 	unsigned long n_args = 0;
+
+	if (car(p)->type == OBJ_CONS)
+		return apply_function(eval(car(p)), p->vcdr, "LAMBDA");
 	_ASSERTP(car(p)->type == OBJ_IDENTIFIER, NOT A FUNCTION, EVAL, car(p));
 
 	if (current_env == nil)
@@ -449,9 +473,17 @@ eval_cons(const struct object *p)
 
 	if (!strcmp(p->vcar->value.id, "lambda"))
 	{
-		q = new_object(OBJ_IDENTIFIER);
-		q->value.id = strdup("lambda");
-		return q;
+		if (current_env != nil)
+		{
+			q = new_object(OBJ_CONS);
+			q->vcar = new_object(OBJ_IDENTIFIER);
+			q->vcar->value.id = strdup("closure");
+			q->vcdr = new_object(OBJ_CONS);
+			q->vcdr->vcar = current_env;
+			q->vcdr->vcdr = p->vcdr;
+			return q;
+		}
+		return (objectp)p;
 	}
 
 	key.name = p->vcar->value.id;

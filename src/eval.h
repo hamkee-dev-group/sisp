@@ -57,6 +57,7 @@ objectp eval_bquote(objectp);
 objectp eval_rat(const struct object *);
 objectp eval_cons(const struct object *);
 objectp eval_set(const struct object *);
+objectp apply_function(objectp, objectp, const char *);
 objectp expand_macro(objectp, objectp);
 int is_macro(objectp);
 int in_set(objectp, objectp);

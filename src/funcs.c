@@ -963,6 +963,12 @@ F_eval(const struct object *args)
 }
 
 objectp
+F_funcall(const struct object *args)
+{
+	return apply_function(eval(car(args)), cdr(args), "FUNCALL");
+}
+
+objectp
 F_defmacro(const struct object *args)
 {
 	objectp func_name, body;
@@ -1145,6 +1151,7 @@ const funcs functions[] = {
 	{"equalp", F_equalp},
 	{"eval", F_eval},
 	{"evlis", F_evlis},
+	{"funcall", F_funcall},
 	{"gc", F_gc},
 	{"if", F_if},
 	{"in", F_member},

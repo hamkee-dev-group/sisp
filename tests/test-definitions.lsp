@@ -202,6 +202,17 @@
 (if (equal (eval '(+ 1 2)) 3) (print "PASS: eval-basic") (print "FAIL: eval-basic"))
 (if (equal (eval '(* 3 4)) 12) (print "PASS: eval-mul") (print "FAIL: eval-mul"))
 
+; --- direct lambda call and funcall ---
+(if (equal ((lambda (x) (+ x 1)) 2) 3)
+    (print "PASS: lambda-direct-call")
+    (print "FAIL: lambda-direct-call"))
+(if (equal (funcall (lambda (x) x) 5) 5)
+    (print "PASS: funcall-identity")
+    (print "FAIL: funcall-identity"))
+(if (equal (let ((x 5)) (funcall (lambda (y) (+ x y)) 3)) 8)
+    (print "PASS: funcall-captures-let")
+    (print "FAIL: funcall-captures-let"))
+
 ; --- undef ---
 (define temp 42)
 (undef temp)
