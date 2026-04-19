@@ -64,6 +64,7 @@ listp       test-types.lsp
 load        test-load.sh
 macroexpand-1  test-definitions.lsp
 map         test-lists.lsp,test-reducers.sh
+mapcar      test-lists.lsp
 memberp     test-sets.lsp
 mod         test-arithmetic.lsp
 not         test-boolean.lsp

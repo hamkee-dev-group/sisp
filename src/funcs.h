@@ -41,7 +41,7 @@ extern objectp F_null(const struct object *);
 extern objectp F_symbolp(const struct object *);
 extern objectp F_endp(const struct object *);
 
-#define FUNCS_N 87
+#define FUNCS_N 88
 extern const funcs functions[FUNCS_N];
 #define ISNUMERIC(x) ((x)->type == OBJ_INTEGER || (x)->type == OBJ_RATIONAL) \
 						 ? true                                              \

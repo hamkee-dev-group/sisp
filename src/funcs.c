@@ -384,6 +384,8 @@ objectp
 F_list(const struct object *args)
 {
 	objectp first, prev, p1;
+	if (args == nil)
+		return nil;
 	p1 = new_object(OBJ_CONS);
 	p1->vcar = eval(car(args));
 	first = p1;
@@ -428,7 +430,7 @@ F_map(const struct object *args)
 	p1 = eval(cadr(args));
 	p = car(args);
 	_ASSERTP(p1->type == OBJ_CONS, NOT CONS, MAP, p1);
-	_ASSERTP(p->type == OBJ_IDENTIFIER, NOT IDENTIFER, MAP, p);
+	_ASSERTP(p->type == OBJ_IDENTIFIER || p->type == OBJ_CONS, NOT IDENTIFER, MAP, p);
 
 	do
 	{
@@ -1164,6 +1166,7 @@ const funcs functions[] = {
 	{"load", F_loadfile},
 	{"macroexpand-1", F_macroexpand_1},
 	{"map", F_map},
+	{"mapcar", F_map},
 	{"memberp", F_member},
 	{"mod", F_mod},
 	{"not", F_not},

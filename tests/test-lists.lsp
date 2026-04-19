@@ -29,6 +29,7 @@
 (if (equal (list 1 2 3) '(1 2 3)) (print "PASS: list-basic") (print "FAIL: list-basic"))
 (if (equal (list 'a) '(a)) (print "PASS: list-single") (print "FAIL: list-single"))
 (if (equal (list 1 '(2 3) 4) '(1 (2 3) 4)) (print "PASS: list-nested") (print "FAIL: list-nested"))
+(if (equal (list) nil) (print "PASS: list-empty") (print "FAIL: list-empty"))
 
 ; --- ord (length) ---
 (if (equal (ord '(1 2 3)) 3) (print "PASS: ord-basic") (print "FAIL: ord-basic"))
@@ -63,6 +64,9 @@
 (if (equal (map square '(1 2 3 4)) '(1 4 9 16)) (print "PASS: map-square") (print "FAIL: map-square"))
 (define (inc x) (+ x 1))
 (if (equal (map inc '(0 1 2)) '(1 2 3)) (print "PASS: map-inc") (print "FAIL: map-inc"))
+(if (equal (map (lambda (x) x) '(1 2)) '(1 2)) (print "PASS: map-lambda-id") (print "FAIL: map-lambda-id"))
+(if (equal (mapcar (lambda (x) x) '(1 2)) '(1 2)) (print "PASS: mapcar-lambda-id") (print "FAIL: mapcar-lambda-id"))
+(if (equal (mapcar double '(1 2 3)) '(2 4 6)) (print "PASS: mapcar-identifier") (print "FAIL: mapcar-identifier"))
 
 ; --- append / union on lists ---
 (if (equal (append '(1 2) '(3 4)) '(1 2 3 4)) (print "PASS: append-basic") (print "FAIL: append-basic"))
