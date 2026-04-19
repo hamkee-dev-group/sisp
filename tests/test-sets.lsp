@@ -199,6 +199,17 @@
 
 (undef sym-pow sym-prod tup-a tup-b ns-a ns-b)
 
+; --- Nested comprehension-set members: equality, `in`, and dedup
+;     must not silently false-reject or retain duplicates ---
+(if (equal {tau : (> tau 0)} {tau : (> tau 0)}) (print "PASS: comp-equal-self") (print "FAIL: comp-equal-self"))
+(if (equal (equal {tau : (> tau 0)} {tau : (< tau 0)}) nil) (print "PASS: comp-equal-diff") (print "FAIL: comp-equal-diff"))
+(if (equal {{tau : (> tau 0)}} {{tau : (> tau 0)}}) (print "PASS: nested-comp-equal") (print "FAIL: nested-comp-equal"))
+(if (equal (equal {{tau : (> tau 0)}} {{tau : (< tau 0)}}) nil) (print "PASS: nested-comp-equal-diff") (print "FAIL: nested-comp-equal-diff"))
+(if (equal (in {tau : (> tau 0)} {{tau : (> tau 0)}} 'equal) t) (print "PASS: nested-comp-in") (print "FAIL: nested-comp-in"))
+(if (equal (in {tau : (< tau 0)} {{tau : (> tau 0)}} 'equal) nil) (print "PASS: nested-comp-in-miss") (print "FAIL: nested-comp-in-miss"))
+(if (equal (ord {{tau : (> tau 0)} {tau : (> tau 0)}}) 1) (print "PASS: nested-comp-dedup") (print "FAIL: nested-comp-dedup"))
+(if (equal {{tau : (> tau 0)} {tau : (> tau 0)}} {{tau : (> tau 0)}}) (print "PASS: nested-comp-dedup-equal") (print "FAIL: nested-comp-dedup-equal"))
+
 ; cleanup
 (undef ps ps3 cp mixed nested A compA)
 

@@ -97,13 +97,17 @@ eqset(objectp a, objectp b)
 {
 	objectp c, tmp, count;
 	int found = -1;
-	count = b;
-	if ((cdr(a)->type != OBJ_SET && cdr(a) != nil) ||
-		(cdr(b)->type != OBJ_SET && cdr(b) != nil))
+	if (a == b)
+		return t;
+	if (COMPSET(a) || COMPSET(b))
 	{
-		fprintf(stderr, "; EQSET: SET NOT BY EXTENSION\n");
-		return nil;
+		if (!COMPSET(a) || !COMPSET(b))
+			return nil;
+		if (eqcons(car(a), car(b)) != t)
+			return nil;
+		return eqcons(cdr(a), cdr(b));
 	}
+	count = b;
 	do
 	{
 		tmp = b;
@@ -223,13 +227,17 @@ eqset_p(objectp a, objectp b)
 {
 	objectp c, tmp, count;
 	int found = -1;
-	count = b;
-	if ((cdr(a)->type != OBJ_SET && cdr(a) != nil) ||
-		(cdr(b)->type != OBJ_SET && cdr(b) != nil))
+	if (a == b)
+		return t;
+	if (COMPSET(a) || COMPSET(b))
 	{
-		fprintf(stderr, "; EQSET: SET NOT BY EXTENSION\n");
-		return nil;
+		if (!COMPSET(a) || !COMPSET(b))
+			return nil;
+		if (eqcons_p(car(a), car(b)) != t)
+			return nil;
+		return eqcons_p(cdr(a), cdr(b));
 	}
+	count = b;
 	do
 	{
 		tmp = b;
