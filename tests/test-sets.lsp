@@ -156,6 +156,49 @@
 ; symdiff with equivalent rationals
 (if (equal (symdiff {1/2 3/4} {2/4 5/6}) {3/4 5/6}) (print "PASS: rat-symdiff") (print "FAIL: rat-symdiff"))
 
+; --- SISP extension protection: symbolic and structured members ---
+; These protect set semantics against CL-compat changes to eq, consp,
+; or reader case that could otherwise silently alter identifier or
+; cons-cell comparison inside set operations.
+
+; Symbolic members: union / cap / diff / symdiff
+(if (equal (union {a b} {b c}) {a b c}) (print "PASS: ext-union-sym") (print "FAIL: ext-union-sym"))
+(if (equal (cap {a b c} {b c d}) {b c}) (print "PASS: ext-cap-sym") (print "FAIL: ext-cap-sym"))
+(if (equal (diff {a b c} {b}) {a c}) (print "PASS: ext-diff-sym") (print "FAIL: ext-diff-sym"))
+(if (equal (symdiff {a b c} {b c d}) {a d}) (print "PASS: ext-symdiff-sym") (print "FAIL: ext-symdiff-sym"))
+(if (equal (in 'a {a b c}) t) (print "PASS: ext-in-sym") (print "FAIL: ext-in-sym"))
+(if (equal (in 'd {a b c}) nil) (print "PASS: ext-in-sym-miss") (print "FAIL: ext-in-sym-miss"))
+
+; Symbolic members: pow / prod
+(define sym-pow (pow {a b}))
+(if (equal (ord sym-pow) 4) (print "PASS: ext-pow-sym-card") (print "FAIL: ext-pow-sym-card"))
+(if (equal (in {a} sym-pow 'equal) t) (print "PASS: ext-pow-sym-has-a") (print "FAIL: ext-pow-sym-has-a"))
+(if (equal (in {a b} sym-pow 'equal) t) (print "PASS: ext-pow-sym-has-ab") (print "FAIL: ext-pow-sym-has-ab"))
+
+(define sym-prod (prod {a b} {x y}))
+(if (equal (ord sym-prod) 4) (print "PASS: ext-prod-sym-card") (print "FAIL: ext-prod-sym-card"))
+(if (equal (in '(a x) sym-prod 'equal) t) (print "PASS: ext-prod-sym-ax") (print "FAIL: ext-prod-sym-ax"))
+(if (equal (in '(b y) sym-prod 'equal) t) (print "PASS: ext-prod-sym-by") (print "FAIL: ext-prod-sym-by"))
+
+; Structured (proper-list tuple) members: union / cap / diff / symdiff
+(define tup-a {(1 2) (3 4) (5 6)})
+(define tup-b {(3 4) (7 8)})
+(if (equal (union tup-a tup-b) {(1 2) (3 4) (5 6) (7 8)}) (print "PASS: ext-union-tuple") (print "FAIL: ext-union-tuple"))
+(if (equal (cap tup-a tup-b) {(3 4)}) (print "PASS: ext-cap-tuple") (print "FAIL: ext-cap-tuple"))
+(if (equal (diff tup-a tup-b) {(1 2) (5 6)}) (print "PASS: ext-diff-tuple") (print "FAIL: ext-diff-tuple"))
+(if (equal (symdiff tup-a tup-b) {(1 2) (5 6) (7 8)}) (print "PASS: ext-symdiff-tuple") (print "FAIL: ext-symdiff-tuple"))
+(if (equal (in '(3 4) tup-a 'equal) t) (print "PASS: ext-in-tuple") (print "FAIL: ext-in-tuple"))
+(if (equal (in '(9 9) tup-a 'equal) nil) (print "PASS: ext-in-tuple-miss") (print "FAIL: ext-in-tuple-miss"))
+
+; Nested-set members: union / cap / diff / symdiff
+(define ns-a {{1 2} {3 4} {5 6}})
+(define ns-b {{3 4} {7 8}})
+(if (equal (cap ns-a ns-b) {{3 4}}) (print "PASS: ext-cap-nested") (print "FAIL: ext-cap-nested"))
+(if (equal (diff ns-a ns-b) {{1 2} {5 6}}) (print "PASS: ext-diff-nested") (print "FAIL: ext-diff-nested"))
+(if (equal (symdiff ns-a ns-b) {{1 2} {5 6} {7 8}}) (print "PASS: ext-symdiff-nested") (print "FAIL: ext-symdiff-nested"))
+
+(undef sym-pow sym-prod tup-a tup-b ns-a ns-b)
+
 ; cleanup
 (undef ps ps3 cp mixed nested A compA)
 

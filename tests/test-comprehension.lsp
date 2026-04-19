@@ -136,6 +136,30 @@
 
 (undef lists-ok lists2)
 
+; --- SISP extension protection: comprehension membership must preserve
+;     tuple/list/set shape via quoting so CL-compat changes to eq, consp,
+;     or reader case cannot silently unwrap the candidate value ---
+
+; Proper-list tuple as candidate: car/cdr must see the real list, not an atom
+(define head-one {tau : (equal (car tau) 1)})
+(if (equal (in '(1 2) head-one) t) (print "PASS: comp-ext-proper-list-head") (print "FAIL: comp-ext-proper-list-head"))
+(if (equal (in '(1) head-one) t) (print "PASS: comp-ext-singleton-head") (print "FAIL: comp-ext-singleton-head"))
+(if (equal (in '(2 1) head-one) nil) (print "PASS: comp-ext-proper-list-head-miss") (print "FAIL: comp-ext-proper-list-head-miss"))
+
+; Comprehension predicate using list operations must not mis-see a singleton
+(define contains-one {tau : (in 1 tau)})
+(if (equal (in '(1) contains-one) t) (print "PASS: comp-ext-singleton-in") (print "FAIL: comp-ext-singleton-in"))
+(if (equal (in '(1 2 3) contains-one) t) (print "PASS: comp-ext-multi-in") (print "FAIL: comp-ext-multi-in"))
+(if (equal (in '(2 3) contains-one) nil) (print "PASS: comp-ext-multi-in-miss") (print "FAIL: comp-ext-multi-in-miss"))
+
+; Nested set as comprehension member: substitution keeps set shape intact
+(define nested-comp {tau : (equal tau {1 2})})
+(if (equal (in {1 2} nested-comp) t) (print "PASS: comp-ext-nested-set") (print "FAIL: comp-ext-nested-set"))
+(if (equal (in {2 1} nested-comp) t) (print "PASS: comp-ext-nested-set-reorder") (print "FAIL: comp-ext-nested-set-reorder"))
+(if (equal (in {1 3} nested-comp) nil) (print "PASS: comp-ext-nested-set-miss") (print "FAIL: comp-ext-nested-set-miss"))
+
+(undef head-one contains-one nested-comp)
+
 ; cleanup
 (undef evens pos small-pos neg nonzero big big-even not-evens pos-odd A B sd cp pw)
 
