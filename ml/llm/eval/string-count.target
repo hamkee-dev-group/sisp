@@ -1,0 +1,3 @@
+ (bench-count-walk wanted (cdr chars) (+ total 1)))
+        (t (bench-count-walk wanted (cdr chars) total))))
+(define (bench-count wanted text) (bench-count-walk wanted (str-to-list text) 0))

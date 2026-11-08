@@ -1,0 +1,95 @@
+;G:Remember that the display theme is blue.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "theme" "blue")
+
+;G:Remember that the display theme is blue.
+;O:remembered:theme
+;M:theme=blue
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the retry limit is five.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "retries" "5")
+
+;G:Remember that the retry limit is five.
+;O:remembered:retries
+;M:retries=5
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the output mode is terse.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "mode" "terse")
+
+;G:Remember that the output mode is terse.
+;O:remembered:mode
+;M:mode=terse
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the active port is eight.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "port" "8")
+
+;G:Remember that the active port is eight.
+;O:remembered:port
+;M:port=8
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the chosen color is amber.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "color" "amber")
+
+;G:Remember that the chosen color is amber.
+;O:remembered:color
+;M:color=amber
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the cache policy is local.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "cache" "local")
+
+;G:Remember that the cache policy is local.
+;O:remembered:cache
+;M:cache=local
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the selected lane is north.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "lane" "north")
+
+;G:Remember that the selected lane is north.
+;O:remembered:lane
+;M:lane=north
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:Remember that the build tag is green.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "build" "green")
+
+;G:Remember that the build tag is green.
+;O:remembered:build
+;M:build=green
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")

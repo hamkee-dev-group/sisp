@@ -1,0 +1,95 @@
+;G:Test whether three point five is a number.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(numberp 3.5))
+
+;G:Test whether three point five is a number.
+;O:eval=>t
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "t")
+
+;G:Test whether a one-element list is a cons.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(consp '(8)))
+
+;G:Test whether a one-element list is a cons.
+;O:eval=>t
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "t")
+
+;G:Check whether the lists 2 3 and 2 3 are equal.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(equal '(2 3) '(2 3)))
+
+;G:Check whether the lists 2 3 and 2 3 are equal.
+;O:eval=>t
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "t")
+
+;G:Count the integers from four through nine.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length (seq 4 9)))
+
+;G:Count the integers from four through nine.
+;O:eval=>6
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "6")
+
+;G:Sum the integers from one through five.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(foldl (lambda (a x) (+ a x)) 0 (seq 1 5)))
+
+;G:Sum the integers from one through five.
+;O:eval=>15
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "15")
+
+;G:Add one to every value in 2 4 6.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(map (lambda (x) (+ x 1)) '(2 4 6)))
+
+;G:Add one to every value in 2 4 6.
+;O:eval=>(3 5 7)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(3 5 7)")
+
+;G:Keep only even values from 1 2 3 4 5 6.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(filter (lambda (x) (= (mod x 2) 0)) '(1 2 3 4 5 6)))
+
+;G:Keep only even values from 1 2 3 4 5 6.
+;O:eval=>(2 4 6)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(2 4 6)")
+
+;G:Evaluate the quoted addition of six and seven.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(eval '(+ 6 7)))
+
+;G:Evaluate the quoted addition of six and seven.
+;O:eval=>13
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "13")

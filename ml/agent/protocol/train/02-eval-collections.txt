@@ -1,0 +1,95 @@
+;G:Find the length of the list containing 2 4 6 and 8.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length '(2 4 6 8)))
+
+;G:Find the length of the list containing 2 4 6 and 8.
+;O:eval=>4
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "4")
+
+;G:Reverse the list 5 6 7.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(reverse '(5 6 7)))
+
+;G:Reverse the list 5 6 7.
+;O:eval=>(7 6 5)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(7 6 5)")
+
+;G:Append the lists 1 2 and 3 4.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(append '(1 2) '(3 4)))
+
+;G:Append the lists 1 2 and 3 4.
+;O:eval=>(1 2 3 4)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(1 2 3 4)")
+
+;G:Select item two from the zero-indexed list 10 20 30 40.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(nth 2 '(10 20 30 40)))
+
+;G:Select item two from the zero-indexed list 10 20 30 40.
+;O:eval=>30
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "30")
+
+;G:Take the first three values from 9 8 7 6 5.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(take '(9 8 7 6 5) 3))
+
+;G:Take the first three values from 9 8 7 6 5.
+;O:eval=>(9 8 7)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(9 8 7)")
+
+;G:Drop the first two values from 9 8 7 6 5.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(drop '(9 8 7 6 5) 2))
+
+;G:Drop the first two values from 9 8 7 6 5.
+;O:eval=>(7 6 5)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(7 6 5)")
+
+;G:Sum the list 3 6 9 with a left fold.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(foldl (lambda (a x) (+ a x)) 0 '(3 6 9)))
+
+;G:Sum the list 3 6 9 with a left fold.
+;O:eval=>18
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "18")
+
+;G:Square every value in the list 1 2 3.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(map (lambda (x) (* x x)) '(1 2 3)))
+
+;G:Square every value in the list 1 2 3.
+;O:eval=>(1 4 9)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(1 4 9)")

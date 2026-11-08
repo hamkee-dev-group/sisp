@@ -1,0 +1,89 @@
+# C build products
+*.o
+*.d
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+/src/sisp
+/src/embed
+/programs/
+
+# Compiler, sanitizer, coverage, and analysis output
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+*.dSYM/
+core
+core.*
+/.cppcheck-cache/
+/.cppcheck-analyze-cache/
+
+# Out-of-tree builds, editor indexes and profiler output
+/build/
+compile_commands.json
+/.cache/
+/.clangd/
+tags
+TAGS
+cscope.*
+perf.data*
+vgcore.*
+callgrind.out.*
+massif.out.*
+
+# Python caches and environments used by test tooling
+__pycache__/
+*.py[cod]
+/.pytest_cache/
+/.mypy_cache/
+/.ruff_cache/
+.venv/
+venv/
+
+# Logs and temporary output
+*.log
+*.out
+*.tmp
+*.swp
+*.swo
+*~
+*.orig
+*.bak
+*.bak-*
+
+# Local editor and operating-system metadata
+/.vscode/
+/.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets and machine-specific configuration
+.env
+.env.*
+!.env.example
+
+# Generated model artifacts
+/ml/llm/checkpoints/
+/ml/llm/runs/
+/ml/llm/generated/
+/ml/llm/data/local/
+/ml/agent/generated/
+/ml/agent/memory/
+/tests/fuzz-out/
+*.ckpt
+*.checkpoint
+*.safetensors
+*.bin
+src/libsisp.h
+
+# sBTC persistent ledger data
+examples/sbtc/*.dat
+
+# Machine disk images are runtime persistence artifacts (auto-saved on
+# every (sh ...) call); boot recreates a clean disk when absent.
+examples/machine/disk-*.img
+/ml/chatbot/local/

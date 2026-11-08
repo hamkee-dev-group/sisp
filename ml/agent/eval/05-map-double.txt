@@ -1,0 +1,11 @@
+;G:Double every value in the list 5 7 11.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(map (lambda (x) (* x 2)) '(5 7 11)))
+
+;G:Double every value in the list 5 7 11.
+;O:eval=>(10 14 22)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(10 14 22)")

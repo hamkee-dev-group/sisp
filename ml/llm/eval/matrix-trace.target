@@ -1,0 +1,2 @@
+ (bench-trace-walk matrix (+ row 1) (+ total (mat-ref matrix row row))))))
+(define (bench-trace matrix) (bench-trace-walk matrix 0 0))

@@ -1,0 +1,2 @@
+ (bench-reverse-walk (cdr xs) (cons (car xs) out)))))
+(define (bench-reverse xs) (bench-reverse-walk xs nil))

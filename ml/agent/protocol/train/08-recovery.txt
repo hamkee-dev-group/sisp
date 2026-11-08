@@ -1,0 +1,95 @@
+;G:Compute twenty-two plus thirteen despite the invalid action.
+;O:invalid=>(unknown-action)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(+ 22 13))
+
+;G:Compute twenty-two plus thirteen despite the invalid action.
+;O:eval=>35
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "35")
+
+;G:Find the length of 4 3 2 after an unhelpful observation.
+;O:invalid=>no-tool-result
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length '(4 3 2)))
+
+;G:Find the length of 4 3 2 after an unhelpful observation.
+;O:eval=>3
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "3")
+
+;G:Reverse 8 1 after the previous action was rejected.
+;O:invalid=>(reverse 8 1)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(reverse '(8 1)))
+
+;G:Reverse 8 1 after the previous action was rejected.
+;O:eval=>(1 8)
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "(1 8)")
+
+;G:Read matrix entry row zero column one after a bad action.
+;O:invalid=>matrix-request
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-ref [[7 12]] 0 1))
+
+;G:Read matrix entry row zero column one after a bad action.
+;O:eval=>12
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "12")
+
+;G:Recall the stored region after an unknown action.
+;O:invalid=>(memory region)
+;M:region=west
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "region")
+
+;G:Recall the stored region after an unknown action.
+;O:recall=>region=west
+;M:region=west
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "west")
+
+;G:Recall the stored phase after an unhelpful result.
+;O:invalid=>not-found
+;M:phase=final
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "phase")
+
+;G:Recall the stored phase after an unhelpful result.
+;O:recall=>phase=final
+;M:phase=final
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "final")
+
+;G:Recall the stored owner after malformed output.
+;O:invalid=>broken-form
+;M:owner=team
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "owner")
+
+;G:Recall the stored owner after malformed output.
+;O:recall=>owner=team
+;M:owner=team
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "team")
+
+;G:Recall the stored level after an invalid tool choice.
+;O:invalid=>wrong-tool
+;M:level=high
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "level")
+
+;G:Recall the stored level after an invalid tool choice.
+;O:recall=>level=high
+;M:level=high
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "high")

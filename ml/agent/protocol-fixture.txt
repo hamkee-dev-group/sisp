@@ -1,0 +1,50 @@
+; Exact short policy traces for a later agent-protocol fine-tuning phase.
+; This fixture is not automatically mixed into base code pretraining.
+
+;G:Compute 17 plus 25.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(+ 17 25))
+
+;G:Compute 17 plus 25.
+;O:eval=>42
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "42")
+
+;G:Remember that the project language is SISP.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "language" "SISP")
+
+;G:Remember that the project language is SISP.
+;O:remembered:language
+;M:language=SISP
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")
+
+;G:What language did I ask you to remember?
+;O:start
+;M:language=SISP
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "language")
+
+;G:What language did I ask you to remember?
+;O:recall=>language=SISP
+;M:language=SISP
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "SISP")
+
+;G:Find the length of a three-element list.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length '(a b c)))
+
+;G:Find the length of a three-element list.
+;O:eval=>3
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "3")

@@ -1,0 +1,95 @@
+;G:What display theme was stored?
+;O:start
+;M:theme=violet
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "theme")
+
+;G:What display theme was stored?
+;O:recall=>theme=violet
+;M:theme=violet
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "violet")
+
+;G:What retry limit was stored?
+;O:start
+;M:retries=7
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "retries")
+
+;G:What retry limit was stored?
+;O:recall=>retries=7
+;M:retries=7
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "7")
+
+;G:What output mode was stored?
+;O:start
+;M:mode=verbose
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "mode")
+
+;G:What output mode was stored?
+;O:recall=>mode=verbose
+;M:mode=verbose
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "verbose")
+
+;G:What active port was stored?
+;O:start
+;M:port=11
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "port")
+
+;G:What active port was stored?
+;O:recall=>port=11
+;M:port=11
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "11")
+
+;G:What chosen color was stored?
+;O:start
+;M:color=indigo
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "color")
+
+;G:What chosen color was stored?
+;O:recall=>color=indigo
+;M:color=indigo
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "indigo")
+
+;G:What cache policy was stored?
+;O:start
+;M:cache=shared
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "cache")
+
+;G:What cache policy was stored?
+;O:recall=>cache=shared
+;M:cache=shared
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "shared")
+
+;G:What selected lane was stored?
+;O:start
+;M:lane=south
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "lane")
+
+;G:What selected lane was stored?
+;O:recall=>lane=south
+;M:lane=south
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "south")
+
+;G:What build tag was stored?
+;O:start
+;M:build=stable
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "build")
+
+;G:What build tag was stored?
+;O:recall=>build=stable
+;M:build=stable
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "stable")

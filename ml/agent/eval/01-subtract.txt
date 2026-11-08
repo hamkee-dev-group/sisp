@@ -1,0 +1,11 @@
+;G:Subtract thirty-eight from ninety-one.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(- 91 38))
+
+;G:Subtract thirty-eight from ninety-one.
+;O:eval=>53
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "53")

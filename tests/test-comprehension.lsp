@@ -1,0 +1,214 @@
+; ============================================================
+; SISP Test Suite — Comprehension Sets {tau : condition}
+; ============================================================
+
+(print "=== COMPREHENSION SET TESTS ===")
+
+; --- Basic comprehension ---
+(define evens {tau : (equal (mod tau 2) 0)})
+(if (equal (in 2 evens) t) (print "PASS: comp-even-2") (print "FAIL: comp-even-2"))
+(if (equal (in 4 evens) t) (print "PASS: comp-even-4") (print "FAIL: comp-even-4"))
+(if (equal (in 3 evens) nil) (print "PASS: comp-odd-3") (print "FAIL: comp-odd-3"))
+(if (equal (in 0 evens) t) (print "PASS: comp-even-0") (print "FAIL: comp-even-0"))
+
+; --- Comprehension with comparison ---
+(define pos {tau : (> tau 0)})
+(if (equal (in 1 pos) t) (print "PASS: comp-pos-1") (print "FAIL: comp-pos-1"))
+(if (equal (in 100 pos) t) (print "PASS: comp-pos-100") (print "FAIL: comp-pos-100"))
+(if (equal (in 0 pos) nil) (print "PASS: comp-pos-0") (print "FAIL: comp-pos-0"))
+(if (equal (in -1 pos) nil) (print "PASS: comp-pos-neg") (print "FAIL: comp-pos-neg"))
+
+; --- Compound condition ---
+(define small-pos {tau : (and (> tau 0) (< tau 5))})
+(if (equal (in 1 small-pos) t) (print "PASS: comp-range-1") (print "FAIL: comp-range-1"))
+(if (equal (in 4 small-pos) t) (print "PASS: comp-range-4") (print "FAIL: comp-range-4"))
+(if (equal (in 5 small-pos) nil) (print "PASS: comp-range-5") (print "FAIL: comp-range-5"))
+(if (equal (in 0 small-pos) nil) (print "PASS: comp-range-0") (print "FAIL: comp-range-0"))
+
+; --- Subset with comprehension ---
+(if (equal (subset {1 2 3} small-pos) t) (print "PASS: subset-comp") (print "FAIL: subset-comp"))
+(if (equal (subset {1 2 5} small-pos) nil) (print "PASS: subset-comp-fail") (print "FAIL: subset-comp-fail"))
+
+; --- Union of comprehension sets ---
+(define neg {tau : (< tau 0)})
+(define nonzero (union pos neg))
+(if (equal (in 5 nonzero) t) (print "PASS: union-comp-pos") (print "FAIL: union-comp-pos"))
+(if (equal (in -3 nonzero) t) (print "PASS: union-comp-neg") (print "FAIL: union-comp-neg"))
+(if (equal (in 0 nonzero) nil) (print "PASS: union-comp-zero") (print "FAIL: union-comp-zero"))
+
+; --- Intersection of comprehension sets ---
+(define big {tau : (> tau 10)})
+(define big-even (cap evens big))
+(if (equal (in 12 big-even) t) (print "PASS: cap-comp-12") (print "FAIL: cap-comp-12"))
+(if (equal (in 11 big-even) nil) (print "PASS: cap-comp-11") (print "FAIL: cap-comp-11"))
+(if (equal (in 8 big-even) nil) (print "PASS: cap-comp-8") (print "FAIL: cap-comp-8"))
+(define cap-third-comp (cap {1 2 3 4} {2 3 4} evens))
+(if (equal (in 2 cap-third-comp) t)
+    (print "PASS: cap-third-comprehension-in")
+    (print "FAIL: cap-third-comprehension-in"))
+(if (equal (in 3 cap-third-comp) nil)
+    (print "PASS: cap-third-comprehension-out")
+    (print "FAIL: cap-third-comprehension-out"))
+
+; --- Complement of comprehension ---
+(define not-evens (complement evens))
+(if (equal (in 3 not-evens) t) (print "PASS: comp-not-even-3") (print "FAIL: comp-not-even-3"))
+(if (equal (in 2 not-evens) nil) (print "PASS: comp-not-even-2") (print "FAIL: comp-not-even-2"))
+
+; --- Diff of comprehension sets ---
+(define pos-odd (diff pos evens))
+(if (equal (in 3 pos-odd) t) (print "PASS: diff-comp-3") (print "FAIL: diff-comp-3"))
+(if (equal (in 2 pos-odd) nil) (print "PASS: diff-comp-2") (print "FAIL: diff-comp-2"))
+(if (equal (in -1 pos-odd) nil) (print "PASS: diff-comp-neg") (print "FAIL: diff-comp-neg"))
+
+; --- Symdiff of comprehension sets ---
+(define A {tau : (and (> tau 0) (< tau 10))})
+(define B {tau : (and (> tau 5) (< tau 15))})
+(define sd (symdiff A B))
+(if (equal (in 3 sd) t) (print "PASS: symdiff-comp-3") (print "FAIL: symdiff-comp-3"))
+(if (equal (in 12 sd) t) (print "PASS: symdiff-comp-12") (print "FAIL: symdiff-comp-12"))
+(if (equal (in 7 sd) nil) (print "PASS: symdiff-comp-7") (print "FAIL: symdiff-comp-7"))
+
+; --- Cartesian product of comprehension sets ---
+(define cp (cartesian-product pos evens))
+; (3 2) should be in: 3 > 0 and 2 is even  (ordered pairs are proper two-lists)
+(if (equal (in '(3 2) cp) t) (print "PASS: prod-comp-in") (print "FAIL: prod-comp-in"))
+; (3 3) should not be in: 3 is odd
+(if (equal (in '(3 3) cp) nil) (print "PASS: prod-comp-notin") (print "FAIL: prod-comp-notin"))
+
+; --- Power set of comprehension ---
+(define pw (powerset pos))
+; {1 2} is a subset of pos
+(if (equal (in {1 2} pw) t) (print "PASS: pow-comp-subset") (print "FAIL: pow-comp-subset"))
+; {-1} is not a subset of pos
+(if (equal (in {-1} pw) nil) (print "PASS: pow-comp-not-subset") (print "FAIL: pow-comp-not-subset"))
+
+; --- Mixed comprehension/extension operands ---
+
+; union: comprehension + extension
+(define u1 (union pos {0}))
+(if (equal (in 5 u1) t) (print "PASS: mixed-union-comp-ext-pos") (print "FAIL: mixed-union-comp-ext-pos"))
+(if (equal (in 0 u1) t) (print "PASS: mixed-union-comp-ext-zero") (print "FAIL: mixed-union-comp-ext-zero"))
+(if (equal (in -1 u1) nil) (print "PASS: mixed-union-comp-ext-neg") (print "FAIL: mixed-union-comp-ext-neg"))
+
+; union: extension + comprehension
+(define u2 (union {0} pos))
+(if (equal (in 0 u2) t) (print "PASS: mixed-union-ext-comp-zero") (print "FAIL: mixed-union-ext-comp-zero"))
+(if (equal (in 5 u2) t) (print "PASS: mixed-union-ext-comp-pos") (print "FAIL: mixed-union-ext-comp-pos"))
+
+; cap: comprehension ∩ extension
+(define c1 (cap evens {1 2 3 4 5 6}))
+(if (equal (in 2 c1) t) (print "PASS: mixed-cap-comp-ext-even") (print "FAIL: mixed-cap-comp-ext-even"))
+(if (equal (in 3 c1) nil) (print "PASS: mixed-cap-comp-ext-odd") (print "FAIL: mixed-cap-comp-ext-odd"))
+(if (equal (in 7 c1) nil) (print "PASS: mixed-cap-comp-ext-outside") (print "FAIL: mixed-cap-comp-ext-outside"))
+
+; cap: extension ∩ comprehension
+(define c2 (cap {1 2 3 4 5 6} evens))
+(if (equal (in 4 c2) t) (print "PASS: mixed-cap-ext-comp-even") (print "FAIL: mixed-cap-ext-comp-even"))
+(if (equal (in 5 c2) nil) (print "PASS: mixed-cap-ext-comp-odd") (print "FAIL: mixed-cap-ext-comp-odd"))
+
+; diff: comprehension \ extension (acceptance criterion)
+(define d1 (diff {tau : (> tau 0)} {2}))
+(if (equal (in 2 d1) nil) (print "PASS: mixed-diff-comp-ext-excluded") (print "FAIL: mixed-diff-comp-ext-excluded"))
+(if (equal (in 3 d1) t) (print "PASS: mixed-diff-comp-ext-kept") (print "FAIL: mixed-diff-comp-ext-kept"))
+
+; diff: extension \ comprehension
+(define d2 (diff {1 2 3 4 5} evens))
+(if (equal (in 1 d2) t) (print "PASS: mixed-diff-ext-comp-odd") (print "FAIL: mixed-diff-ext-comp-odd"))
+(if (equal (in 2 d2) nil) (print "PASS: mixed-diff-ext-comp-even") (print "FAIL: mixed-diff-ext-comp-even"))
+
+; symdiff: comprehension △ extension (acceptance criterion)
+(define s1 (symdiff {tau : (eq (mod tau 2) 0)} {1}))
+(if (equal (in 1 s1) t) (print "PASS: mixed-symdiff-comp-ext-odd") (print "FAIL: mixed-symdiff-comp-ext-odd"))
+(if (equal (in 2 s1) t) (print "PASS: mixed-symdiff-comp-ext-even") (print "FAIL: mixed-symdiff-comp-ext-even"))
+; 0 is even and not in {1}, so it's in exactly one set → in symdiff
+(if (equal (in 0 s1) t) (print "PASS: mixed-symdiff-comp-ext-zero") (print "FAIL: mixed-symdiff-comp-ext-zero"))
+
+; symdiff: extension △ comprehension
+(define s2 (symdiff {1} evens))
+(if (equal (in 1 s2) t) (print "PASS: mixed-symdiff-ext-comp-odd") (print "FAIL: mixed-symdiff-ext-comp-odd"))
+(if (equal (in 4 s2) t) (print "PASS: mixed-symdiff-ext-comp-even") (print "FAIL: mixed-symdiff-ext-comp-even"))
+
+(undef u1 u2 c1 c2 d1 d2 s1 s2)
+
+; --- List membership in comprehension sets ---
+(define lists-ok {tau : (equal tau '(1))})
+(if (equal (in '(1) lists-ok) t) (print "PASS: comp-singleton-list") (print "FAIL: comp-singleton-list"))
+(if (equal (in '(2) lists-ok) nil) (print "PASS: comp-singleton-list-miss") (print "FAIL: comp-singleton-list-miss"))
+(if (equal (in 1 lists-ok) nil) (print "PASS: comp-singleton-list-atom") (print "FAIL: comp-singleton-list-atom"))
+
+(define lists2 {tau : (equal tau '(1 2))})
+(if (equal (in '(1 2) lists2) t) (print "PASS: comp-multi-list") (print "FAIL: comp-multi-list"))
+(if (equal (in '(1 3) lists2) nil) (print "PASS: comp-multi-list-miss") (print "FAIL: comp-multi-list-miss"))
+
+(undef lists-ok lists2)
+
+; --- SISP extension protection: comprehension membership must preserve
+;     tuple/list/set shape via quoting so CL-compat changes to eq, consp,
+;     or reader case cannot silently unwrap the candidate value ---
+
+; Proper-list tuple as candidate: car/cdr must see the real list, not an atom
+(define head-one {tau : (equal (car tau) 1)})
+(if (equal (in '(1 2) head-one) t) (print "PASS: comp-ext-proper-list-head") (print "FAIL: comp-ext-proper-list-head"))
+(if (equal (in '(1) head-one) t) (print "PASS: comp-ext-singleton-head") (print "FAIL: comp-ext-singleton-head"))
+(if (equal (in '(2 1) head-one) nil) (print "PASS: comp-ext-proper-list-head-miss") (print "FAIL: comp-ext-proper-list-head-miss"))
+
+; Comprehension predicate using list operations must not mis-see a singleton
+(define contains-one {tau : (in 1 tau)})
+(if (equal (in '(1) contains-one) t) (print "PASS: comp-ext-singleton-in") (print "FAIL: comp-ext-singleton-in"))
+(if (equal (in '(1 2 3) contains-one) t) (print "PASS: comp-ext-multi-in") (print "FAIL: comp-ext-multi-in"))
+(if (equal (in '(2 3) contains-one) nil) (print "PASS: comp-ext-multi-in-miss") (print "FAIL: comp-ext-multi-in-miss"))
+
+; Nested set as comprehension member: substitution keeps set shape intact
+(define nested-comp {tau : (equal tau {1 2})})
+(if (equal (in {1 2} nested-comp) t) (print "PASS: comp-ext-nested-set") (print "FAIL: comp-ext-nested-set"))
+(if (equal (in {2 1} nested-comp) t) (print "PASS: comp-ext-nested-set-reorder") (print "FAIL: comp-ext-nested-set-reorder"))
+(if (equal (in {1 3} nested-comp) nil) (print "PASS: comp-ext-nested-set-miss") (print "FAIL: comp-ext-nested-set-miss"))
+
+; Capturing an escaped comprehension respects names bound by lambda.
+(define (make-lambda-shadow-set upper)
+  {tau : (and (< tau upper)
+              ((lambda (upper) (> tau upper)) 3))})
+(define lambda-shadow-set (make-lambda-shadow-set 10))
+(if (equal (in 5 lambda-shadow-set) t)
+    (print "PASS: comp-capture-lambda-shadow")
+    (print "FAIL: comp-capture-lambda-shadow"))
+(if (equal (in 11 lambda-shadow-set) nil)
+    (print "PASS: comp-capture-lambda-free")
+    (print "FAIL: comp-capture-lambda-free"))
+
+; Let initforms capture the outer environment, while let names shadow it in
+; the body. In a simultaneous let, high therefore receives the outer limit.
+(define (make-let-shadow-set limit)
+  {tau : (let ((limit 3) (high limit))
+           (and (> tau limit) (< tau high)))})
+(define let-shadow-set (make-let-shadow-set 10))
+(if (equal (in 5 let-shadow-set) t)
+    (print "PASS: comp-capture-let-shadow")
+    (print "FAIL: comp-capture-let-shadow"))
+(if (equal (in 11 let-shadow-set) nil)
+    (print "PASS: comp-capture-let-init")
+    (print "FAIL: comp-capture-let-init"))
+
+; Labels names and parameters remain local, while a free value in the local
+; function body is captured before the comprehension escapes.
+(define between 99)
+(define (make-labels-shadow-set ceiling)
+  {tau : (labels (((between low) (and (> tau low) (< tau ceiling))))
+           (between 3))})
+(define labels-shadow-set (make-labels-shadow-set 10))
+(if (equal (in 5 labels-shadow-set) t)
+    (print "PASS: comp-capture-labels-shadow")
+    (print "FAIL: comp-capture-labels-shadow"))
+(if (equal (in 11 labels-shadow-set) nil)
+    (print "PASS: comp-capture-labels-free")
+    (print "FAIL: comp-capture-labels-free"))
+
+(undef head-one contains-one nested-comp cap-third-comp lambda-shadow-set
+       let-shadow-set labels-shadow-set between)
+
+; cleanup
+(undef evens pos small-pos neg nonzero big big-even not-evens pos-odd A B sd cp pw
+       make-lambda-shadow-set make-let-shadow-set make-labels-shadow-set)
+
+(print "=== COMPREHENSION SET TESTS DONE ===")

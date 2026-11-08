@@ -1,0 +1,95 @@
+;G:Add fourteen and nine.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(+ 14 9))
+
+;G:Add fourteen and nine.
+;O:eval=>23
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "23")
+
+;G:Subtract seventeen from fifty.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(- 50 17))
+
+;G:Subtract seventeen from fifty.
+;O:eval=>33
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "33")
+
+;G:Multiply seven by eight.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(* 7 8))
+
+;G:Multiply seven by eight.
+;O:eval=>56
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "56")
+
+;G:Divide eighty-one by nine.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(/ 81 9))
+
+;G:Divide eighty-one by nine.
+;O:eval=>9
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "9")
+
+;G:Find the remainder when forty-seven is divided by six.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mod 47 6))
+
+;G:Find the remainder when forty-seven is divided by six.
+;O:eval=>5
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "5")
+
+;G:Find the absolute value of negative nineteen.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(abs -19))
+
+;G:Find the absolute value of negative nineteen.
+;O:eval=>19
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "19")
+
+;G:Choose the larger of twelve and forty-four.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(max 12 44))
+
+;G:Choose the larger of twelve and forty-four.
+;O:eval=>44
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "44")
+
+;G:Raise three to the fourth power.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(^ 3 4))
+
+;G:Raise three to the fourth power.
+;O:eval=>81
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "81")

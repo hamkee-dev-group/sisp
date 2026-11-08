@@ -1,0 +1,2 @@
+; Clamp value to the inclusive interval from low to high.
+(define (bench-clamp value low high)

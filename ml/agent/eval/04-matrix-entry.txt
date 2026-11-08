@@ -1,0 +1,11 @@
+;G:Read row one column one from the matrix 6 7; 8 9.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-ref [[6 7] [8 9]] 1 1))
+
+;G:Read row one column one from the matrix 6 7; 8 9.
+;O:eval=>9
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "9")

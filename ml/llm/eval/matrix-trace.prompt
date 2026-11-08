@@ -1,0 +1,4 @@
+; Sum the diagonal of a square native matrix.
+(define (bench-trace-walk matrix row total)
+  (cond ((= row (mat-rows matrix)) total)
+        (t

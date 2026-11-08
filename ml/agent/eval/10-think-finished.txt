@@ -1,0 +1,11 @@
+;G:Answer done after noting that every queue item was handled.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "every queue item was handled")
+
+;G:Answer done after noting that every queue item was handled.
+;O:thought:every queue item was handled
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "done")

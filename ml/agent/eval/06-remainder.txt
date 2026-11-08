@@ -1,0 +1,11 @@
+;G:Find the remainder when seventy-three is divided by eight.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mod 73 8))
+
+;G:Find the remainder when seventy-three is divided by eight.
+;O:eval=>1
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "1")

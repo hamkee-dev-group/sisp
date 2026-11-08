@@ -1,0 +1,1 @@
+  (lambda (value) (outer (inner value))))

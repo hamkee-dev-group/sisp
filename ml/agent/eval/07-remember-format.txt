@@ -1,0 +1,11 @@
+;G:Remember that the report format is compact.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-remember "format" "compact")
+
+;G:Remember that the report format is compact.
+;O:remembered:format
+;M:format=compact
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "remembered")

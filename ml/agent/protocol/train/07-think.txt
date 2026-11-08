@@ -1,0 +1,95 @@
+;G:Answer ready after noting that seven plus five is twelve.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "seven plus five is twelve")
+
+;G:Answer ready after noting that seven plus five is twelve.
+;O:thought:seven plus five is twelve
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "ready")
+
+;G:Answer sorted after noting that the values are already ordered.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "values are already ordered")
+
+;G:Answer sorted after noting that the values are already ordered.
+;O:thought:values are already ordered
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "sorted")
+
+;G:Answer safe after noting that the empty list needs no work.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "empty list needs no work")
+
+;G:Answer safe after noting that the empty list needs no work.
+;O:thought:empty list needs no work
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "safe")
+
+;G:Answer proceed after noting that both checks passed.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "both checks passed")
+
+;G:Answer proceed after noting that both checks passed.
+;O:thought:both checks passed
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "proceed")
+
+;G:Answer retry after noting that the first choice failed.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "first choice failed")
+
+;G:Answer retry after noting that the first choice failed.
+;O:thought:first choice failed
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "retry")
+
+;G:Answer base after noting that zero is the recursion base case.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "zero is the base case")
+
+;G:Answer base after noting that zero is the recursion base case.
+;O:thought:zero is the base case
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "base")
+
+;G:Answer left after noting that the smaller branch comes first.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "smaller branch comes first")
+
+;G:Answer left after noting that the smaller branch comes first.
+;O:thought:smaller branch comes first
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "left")
+
+;G:Answer complete after noting that no tasks remain.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-think "no tasks remain")
+
+;G:Answer complete after noting that no tasks remain.
+;O:thought:no tasks remain
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "complete")

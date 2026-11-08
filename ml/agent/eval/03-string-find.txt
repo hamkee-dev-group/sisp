@@ -1,0 +1,11 @@
+;G:Find the index of cad in abracadabra.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(str-find "abracadabra" "cad"))
+
+;G:Find the index of cad in abracadabra.
+;O:eval=>4
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "4")

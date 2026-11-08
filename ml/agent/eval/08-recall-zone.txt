@@ -1,0 +1,11 @@
+;G:What stored zone should be used?
+;O:start
+;M:zone=east
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "zone")
+
+;G:What stored zone should be used?
+;O:recall=>zone=east
+;M:zone=east
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "east")

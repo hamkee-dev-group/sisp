@@ -1,0 +1,2 @@
+; Return the elements common to two finite SISP sets.
+(define (bench-common left right)

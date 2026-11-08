@@ -1,0 +1,92 @@
+#!/bin/bash
+# Builtin coverage audit: verifies that every registered builtin in
+# src/builtins.c builtins[] has an entry in builtin-coverage.manifest,
+# and that no manifest entries refer to stale builtins.
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+FUNCS="$SCRIPT_DIR/../src/builtins.c"
+MANIFEST="$SCRIPT_DIR/builtin-coverage.manifest"
+PASS=0
+FAIL=0
+
+if [ ! -f "$FUNCS" ]; then
+    echo "ERROR: $FUNCS not found"
+    exit 1
+fi
+if [ ! -f "$MANIFEST" ]; then
+    echo "ERROR: $MANIFEST not found"
+    exit 1
+fi
+
+# Extract registered builtin names from builtins[] in src/builtins.c.
+# Each entry looks like:  \t{"name", builtin_func},  — take the quoted name, then
+# unescape C string backslashes. awk range + grep is portable across GNU and
+# BSD (macOS) tools; a nested-block sed here is not.
+registered=$(awk '/^const struct builtin_spec builtins\[\] = \{/,/^\};/' "$FUNCS" \
+  | sed '/^[[:space:]]*#ifdef SISP_DEBUG/,/^[[:space:]]*#endif/d' \
+  | grep -oE '\{"[^"]*"' | sed 's/^{"//; s/"$//' | sed 's/\\\\/\\/g')
+
+# Extract manifest entries (first field of non-comment, non-blank lines).
+manifest_names=$(grep -v '^\s*#' "$MANIFEST" | grep -v '^\s*$' | awk '{print $1}')
+
+echo "=== BUILTIN COVERAGE AUDIT ==="
+
+# 1. Every registered builtin must appear in the manifest.
+while IFS= read -r builtin; do
+    if echo "$manifest_names" | grep -qxF "$builtin"; then
+        echo "PASS: '$builtin' in manifest"
+        PASS=$((PASS + 1))
+    else
+        echo "FAIL: '$builtin' registered in builtins[] but not in manifest"
+        FAIL=$((FAIL + 1))
+    fi
+done <<< "$registered"
+
+# 2. Every manifest entry must correspond to a registered builtin (no stale entries).
+while IFS= read -r entry; do
+    if echo "$registered" | grep -qxF "$entry"; then
+        echo "PASS: '$entry' not stale"
+        PASS=$((PASS + 1))
+    else
+        echo "FAIL: '$entry' in manifest but not in builtins[] (stale)"
+        FAIL=$((FAIL + 1))
+    fi
+done <<< "$manifest_names"
+
+# 3. Non-exception entries must reference existing test files.
+#    EXCEPTION entries must carry a non-empty reason.
+while IFS= read -r line; do
+    name=$(echo "$line" | awk '{print $1}')
+    second=$(echo "$line" | awk '{print $2}')
+    if [ "$second" = "EXCEPTION" ]; then
+        reason=$(echo "$line" | awk '{for(i=3;i<=NF;i++) printf "%s%s",$i,(i<NF?OFS:"")}')
+        if [ -z "$reason" ]; then
+            echo "FAIL: '$name' EXCEPTION entry has empty reason"
+            FAIL=$((FAIL + 1))
+        else
+            echo "PASS: '$name' EXCEPTION documented"
+            PASS=$((PASS + 1))
+        fi
+        continue
+    fi
+    files=$(echo "$line" | awk '{print $2}')
+    IFS=',' read -ra file_list <<< "$files"
+    for f in "${file_list[@]}"; do
+        if [ -f "$SCRIPT_DIR/$f" ]; then
+            echo "PASS: '$name' -> '$f' exists"
+            PASS=$((PASS + 1))
+        else
+            echo "FAIL: '$name' references '$f' which does not exist"
+            FAIL=$((FAIL + 1))
+        fi
+    done
+done < <(grep -v '^\s*#' "$MANIFEST" | grep -v '^\s*$')
+
+echo ""
+echo "PASSED: $PASS"
+echo "FAILED: $FAIL"
+
+if [ $FAIL -gt 0 ]; then
+    exit 1
+fi
+exit 0

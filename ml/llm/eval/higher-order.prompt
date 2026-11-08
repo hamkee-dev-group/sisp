@@ -1,0 +1,2 @@
+; Compose two unary functions.
+(define (bench-compose outer inner)

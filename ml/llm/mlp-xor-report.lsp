@@ -1,0 +1,15 @@
+(define *xor-final-loss* (vdata (xor-loss *xor-data*)))
+(define *xor-predictions*
+  (map (lambda (example) (vdata (xor-forward (car example)))) *xor-data*))
+(print (list (quote final-loss) *xor-final-loss*))
+(print (list (quote predictions) *xor-predictions*))
+(llm-reset-tests)
+(llm-check "xor-loss-decreased" (< *xor-final-loss* *xor-initial-loss*))
+(llm-check "xor-loss-small" (< *xor-final-loss* 0.001))
+(llm-check "xor-00" (< (nth 0 *xor-predictions*) 0.05))
+(llm-check "xor-01" (> (nth 1 *xor-predictions*) 0.95))
+(llm-check "xor-10" (> (nth 2 *xor-predictions*) 0.95))
+(llm-check "xor-11" (< (nth 3 *xor-predictions*) 0.05))
+(llm-test-summary)
+(print "=== done ===")
+

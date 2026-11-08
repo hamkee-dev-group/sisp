@@ -1,0 +1,11 @@
+;G:Recall the stored channel after a rejected action.
+;O:invalid=>unsupported-call
+;M:channel=delta
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-recall "channel")
+
+;G:Recall the stored channel after a rejected action.
+;O:recall=>channel=delta
+;M:channel=delta
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "delta")

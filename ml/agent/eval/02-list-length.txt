@@ -1,0 +1,11 @@
+;G:Find the length of the list 13 17 19 23 29.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length '(13 17 19 23 29)))
+
+;G:Find the length of the list 13 17 19 23 29.
+;O:eval=>5
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "5")

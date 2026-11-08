@@ -1,0 +1,35 @@
+; Propositional resolution prover derives clauses until contradiction or fixed point.
+; Literals are (pos atom) or (neg atom), and a clause is a list of literals.
+(define (rp-complement literal)
+  (list (cond ((eq (car literal) 'pos) 'neg) (t 'pos)) (cadr literal)))
+(define (rp-remove literal clause)
+  (remove (lambda (item) (equal item literal)) clause))
+(define (rp-unique literals)
+  (foldl (lambda (result literal) (cond ((rp-contains-p result literal) result)
+    (t (append result (list literal))))) nil literals))
+(define (rp-contains-p values wanted)
+  (not (eq (find (lambda (value) (equal value wanted)) values) nil)))
+(define (rp-resolvents left right)
+  (foldl (lambda (results literal)
+    (let ((opposite (rp-complement literal)))
+      (cond ((not (rp-contains-p right opposite)) results)
+            (t (append results (list (rp-unique
+              (append (rp-remove literal left) (rp-remove opposite right))))))))) nil left))
+(define (rp-pairs clauses)
+  (foldl (lambda (results left-index)
+    (append results (foldl (lambda (inner right-index)
+      (cond ((>= left-index right-index) inner)
+            (t (append inner (rp-resolvents (nth left-index clauses) (nth right-index clauses))))))
+      nil (seq 0 (- (length clauses) 1))))) nil (seq 0 (- (length clauses) 1))))
+(define (rp-add-new clauses candidates)
+  (foldl (lambda (result clause)
+    (cond ((rp-contains-p result clause) result) (t (append result (list clause))))) clauses candidates))
+(define (resolution-unsat-p clauses rounds)
+  (cond ((any (lambda (clause) (eq clause nil)) clauses) t)
+        ((= rounds 0) nil)
+        (t (let ((next (rp-add-new clauses (rp-pairs clauses))))
+          (cond ((= (length next) (length clauses)) nil)
+                (t (resolution-unsat-p next (- rounds 1))))))))
+(resolution-unsat-p '(((pos p)) ((neg p))) 3) ; => t
+(resolution-unsat-p '(((pos p) (pos q)) ((neg p) (pos q))) 4) ; => nil
+(resolution-unsat-p '(((pos p)) ((neg p) (pos q)) ((neg q))) 5) ; => t

@@ -1,0 +1,4 @@
+; Reverse a list with a tail-recursive accumulator.
+(define (bench-reverse-walk xs out)
+  (cond ((eq xs nil) out)
+        (t

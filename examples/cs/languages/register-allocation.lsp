@@ -1,0 +1,28 @@
+; Greedy register allocator colors overlapping live intervals and marks unavoidable spills.
+; Intervals are (variable start end); assignments are (variable register-or-spill).
+(define (ra-overlap-p left right)
+  (and (<= (cadr left) (caddr right)) (<= (cadr right) (caddr left))))
+(define (ra-assignment assignments variable)
+  (let ((entry (find (lambda (item) (equal (car item) variable)) assignments)))
+    (cond ((eq entry nil) nil) (t (cadr entry)))))
+(define (ra-used intervals current assignments)
+  (foldl (lambda (used interval)
+    (let ((register (ra-assignment assignments (car interval))))
+      (cond ((and (ra-overlap-p current interval) (not (eq register nil))
+                  (not (eq register 'spill)) (not (in register used)))
+             (cons register used)) (t used)))) nil intervals))
+(define (ra-first-free registers used)
+  (find (lambda (register) (not (in register used))) registers))
+(define (ra-allocate-loop all pending registers assignments)
+  (cond ((eq pending nil) assignments)
+        (t (let ((interval (car pending)))
+          (let ((available (ra-first-free registers (ra-used all interval assignments))))
+            (ra-allocate-loop all (cdr pending) registers
+              (append assignments (list (list (car interval)
+                (cond ((eq available nil) 'spill) (t available)))))))))))
+(define (register-allocate intervals registers)
+  (let ((ordered (sort (lambda (a b) (< (cadr a) (cadr b))) intervals)))
+    (ra-allocate-loop ordered ordered registers nil)))
+(register-allocate '((a 0 4) (b 1 2) (c 3 5)) '(r1 r2)) ; => ((a r1) (b r2) (c r2))
+(register-allocate '((a 0 4) (b 1 2) (c 3 5)) '(r1)) ; => ((a r1) (b spill) (c spill))
+(ra-overlap-p '(x 0 2) '(y 3 5)) ; => nil

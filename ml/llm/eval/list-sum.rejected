@@ -1,0 +1,1 @@
+(define (bench-sum xs) 0)

@@ -1,0 +1,11 @@
+;G:Multiply eleven by twelve after the malformed action.
+;O:invalid=>missing-quote
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(* 11 12))
+
+;G:Multiply eleven by twelve after the malformed action.
+;O:eval=>132
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "132")

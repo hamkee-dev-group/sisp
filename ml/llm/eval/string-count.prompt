@@ -1,0 +1,4 @@
+; Count occurrences of a character in a string.
+(define (bench-count-walk wanted chars total)
+  (cond ((eq chars nil) total)
+        ((equal wanted (car chars))

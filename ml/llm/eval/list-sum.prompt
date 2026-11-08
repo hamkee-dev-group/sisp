@@ -1,0 +1,4 @@
+; Sum every number in a list.
+(define (bench-sum xs)
+  (cond ((eq xs nil) 0)
+        (t

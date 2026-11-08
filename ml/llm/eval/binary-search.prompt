@@ -1,0 +1,5 @@
+; Find a target index in a sorted list, or return nil.
+(define (bench-bsearch values target low high)
+  (cond ((> low high) nil)
+        (t (let ((middle (floor (/ (+ low high) 2))))
+          (cond ((= (nth middle values) target) middle)

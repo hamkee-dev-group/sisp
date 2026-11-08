@@ -1,0 +1,6 @@
+; Sum every number in a list.
+(define (sum xs)
+  (cond ((eq xs nil) 0)
+        (t (+ (car xs) (sum (cdr xs))))))
+
+(sum (list 1 2 3))

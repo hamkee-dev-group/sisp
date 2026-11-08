@@ -1,0 +1,5 @@
+                ((< (nth middle values) target)
+                  (bench-bsearch values target (+ middle 1) high))
+                (t (bench-bsearch values target low (- middle 1))))))))
+(define (bench-find values target)
+  (bench-bsearch values target 0 (- (length values) 1)))

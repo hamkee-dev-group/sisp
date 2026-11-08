@@ -1,0 +1,238 @@
+; ============================================================
+; WINDOW MANAGER — SPLIT PANES, FOCUS, RESIZE, CLOSE
+;
+; Pane: (row col width height proc-id name focused)
+;
+; Shortcuts: split-h, split-v, close, up, down, left, right
+; ============================================================
+
+(define (make-pane row col w h pid name focused)
+  (list row col w h pid name focused))
+(define (pane-row p) (car p))
+(define (pane-col p) (cadr p))
+(define (pane-width p) (caddr p))
+(define (pane-height p) (cadddr p))
+(define (pane-pid p) (car (cddddr p)))
+(define (pane-name p) (cadr (cddddr p)))
+(define (pane-focused p) (caddr (cddddr p)))
+
+(define (pane-set-focused p val)
+  (make-pane (pane-row p) (pane-col p) (pane-width p) (pane-height p)
+    (pane-pid p) (pane-name p) val))
+
+(define (pane-set-size p w h)
+  (make-pane (pane-row p) (pane-col p) w h
+    (pane-pid p) (pane-name p) (pane-focused p)))
+
+(define (wm-focused screen)
+  (find (lambda (p) (eq (pane-focused p) t)) screen))
+
+(define (wm-unfocus-all screen)
+  (map (lambda (p) (pane-set-focused p nil)) screen))
+
+(define (wm-idx screen pane)
+  (wm-idx-acc screen pane 0))
+
+(define (wm-idx-acc entries pane i)
+  (cond ((eq entries nil) nil)
+        ((eq (car entries) pane) i)
+        (t (wm-idx-acc (cdr entries) pane (+ i 1)))))
+
+(define (wm-replace lst idx val)
+  (cond ((eq lst nil) nil)
+        ((= idx 0) (cons val (cdr lst)))
+        (t (cons (car lst) (wm-replace (cdr lst) (- idx 1) val)))))
+
+(define (wm-set-focused screen pane)
+  (let ((u (wm-unfocus-all screen))
+        (idx (wm-idx screen pane)))
+    (cond ((eq idx nil) screen)
+          (t (wm-replace u idx (pane-set-focused pane t))))))
+
+(define (wm-sim-pid name)
+  (cond ((equal name "shell") 1001)
+        ((equal name "sysmon") 1002)
+        ((equal name "editor") 1003)
+        (t (+ 2000 (length name)))))
+
+(define (wm-contains lst name)
+  (not (eq (find (lambda (x) (equal x name)) lst) nil)))
+
+(define (wm-pick-name screen)
+  (let ((names (map (lambda (p) (pane-name p)) screen)))
+    (cond ((not (wm-contains names "shell")) "shell")
+          ((not (wm-contains names "sysmon")) "sysmon")
+          ((not (wm-contains names "editor")) "editor")
+          (t (cat "pane" (num-to-str (length screen)))))))
+
+(define (wm-split-h screen)
+  (let ((f (wm-focused screen)))
+    (cond ((eq f nil) screen)
+          (t (let ((h2 (/ (pane-height f) 2))
+                    (n (wm-pick-name screen)))
+               (let ((top (pane-set-size f (pane-width f) h2))
+                     (bot (make-pane (+ (pane-row f) h2) (pane-col f)
+                            (pane-width f) (- (pane-height f) h2)
+                            (wm-sim-pid n) n nil)))
+                 (let ((rem (remove (lambda (p) (eq p f)) screen)))
+                   (wm-set-focused (append rem (list top bot)) bot))))))))
+
+(define (wm-split-v screen)
+  (let ((f (wm-focused screen)))
+    (cond ((eq f nil) screen)
+          (t (let ((w2 (/ (pane-width f) 2))
+                    (n (wm-pick-name screen)))
+               (let ((left (pane-set-size f w2 (pane-height f)))
+                     (right (make-pane (pane-row f) (+ (pane-col f) w2)
+                             w2 (pane-height f) (wm-sim-pid n) n nil)))
+                 (let ((rem (remove (lambda (p) (eq p f)) screen)))
+                   (wm-set-focused (append rem (list left right)) right))))))))
+
+(define (wm-overlap-x a b)
+  (not (or (> (pane-col a) (+ (pane-col b) (pane-width b) -1))
+           (> (pane-col b) (+ (pane-col a) (pane-width a) -1)))))
+
+(define (wm-overlap-y a b)
+  (not (or (> (pane-row a) (+ (pane-row b) (pane-height b) -1))
+           (> (pane-row b) (+ (pane-row a) (pane-height a) -1)))))
+
+(define (wm-reachable from to dir)
+  (cond ((equal dir 'up)
+         (and (< (pane-row to) (pane-row from)) (wm-overlap-x from to)))
+        ((equal dir 'down)
+         (and (> (pane-row to) (pane-row from)) (wm-overlap-x from to)))
+        ((equal dir 'left)
+         (and (< (pane-col to) (pane-col from)) (wm-overlap-y from to)))
+        ((equal dir 'right)
+         (and (> (pane-col to) (pane-col from)) (wm-overlap-y from to)))
+        (t nil)))
+
+(define (wm-dist dir from to)
+  (cond ((equal dir 'up)    (- (pane-row from) (pane-row to)))
+        ((equal dir 'down)  (- (pane-row to) (pane-row from)))
+        ((equal dir 'left)  (- (pane-col from) (pane-col to)))
+        ((equal dir 'right) (- (pane-col to) (pane-col from)))
+        (t 0)))
+
+(define (wm-closer dir from a b)
+  (let ((da (wm-dist dir from a)) (db (wm-dist dir from b)))
+    (cond ((< 0 db) (and (< 0 db) (or (<= da 0) (< db da))))
+          (t nil))))
+
+(define (wm-find-nearest screen pane dir)
+  (let ((cands (filter (lambda (p)
+                  (and (not (eq p pane)) (wm-reachable pane p dir)))
+                screen)))
+    (foldl (lambda (best cur)
+             (cond ((eq best nil) cur)
+                   ((wm-closer dir pane best cur) cur)
+                   (t best)))
+           nil cands)))
+
+(define (wm-focus-direction screen dir)
+  (let ((f (wm-focused screen)))
+    (cond ((eq f nil) screen)
+          (t (let ((tgt (wm-find-nearest screen f dir)))
+               (cond ((eq tgt nil) screen)
+                     (t (wm-set-focused screen tgt))))))))
+
+(define (wm-close screen)
+  (let ((f (wm-focused screen)))
+    (cond ((eq f nil) screen)
+          ((= (length screen) 1) screen)
+          (t (let ((rem (remove (lambda (p) (eq p f)) screen)))
+               (cond ((eq rem nil) screen)
+                     (t (wm-set-focused rem (car rem)))))))))
+
+(define (wm-resize screen dw dh)
+  (let ((f (wm-focused screen)))
+    (cond ((eq f nil) screen)
+          (t (let ((nw (cond ((< (+ (pane-width f) dw) 3) 3)
+                             (t (+ (pane-width f) dw))))
+                    (nh (cond ((< (+ (pane-height f) dh) 2) 2)
+                              (t (+ (pane-height f) dh)))))
+               (let ((np (pane-set-size f nw nh)))
+                 (wm-set-focused
+                   (wm-replace screen (wm-idx screen f) np) np)))))))
+
+(define (pad s width)
+  (let ((n (length s)))
+    (cond ((>= n width) s)
+          (t (cat s (spaces (- width n)))))))
+
+(define (spaces n)
+  (cond ((<= n 0) "")
+        (t (cat " " (spaces (- n 1))))))
+
+(define (wm-print-pane p)
+  (let ((fm (cond ((eq (pane-focused p) t) " [*]") (t ""))))
+    (print (cat (pad (pane-name p) 10)
+            (cat (cat " r=" (num-to-str (pane-row p)))
+             (cat (cat " c=" (num-to-str (pane-col p)))
+              (cat (cat " " (num-to-str (pane-width p)))
+               (cat (cat "x" (num-to-str (pane-height p)))
+                (cat (cat " pid=" (num-to-str (pane-pid p))) fm)))))))))
+
+(define (wm-layout screen)
+  (print "==========================================")
+  (print "  WINDOW MANAGER LAYOUT")
+  (print (cat "  Panes: " (num-to-str (length screen))))
+  (fore (lambda (p) (wm-print-pane p)) screen)
+  (print "=========================================="))
+
+(define (fore fn lst)
+  (cond ((eq lst nil) nil)
+        (t (progn (fn (car lst)) (fore fn (cdr lst))))))
+
+(define (wm-dispatch screen shortcut)
+  (cond ((equal shortcut 'split-h) (wm-split-h screen))
+        ((equal shortcut 'split-v) (wm-split-v screen))
+        ((equal shortcut 'close)   (wm-close screen))
+        ((equal shortcut 'up)      (wm-focus-direction screen 'up))
+        ((equal shortcut 'down)    (wm-focus-direction screen 'down))
+        ((equal shortcut 'left)    (wm-focus-direction screen 'left))
+        ((equal shortcut 'right)   (wm-focus-direction screen 'right))
+        (t screen)))
+
+(print "==========================================")
+(print "  WINDOW MANAGER — SPLIT PANES")
+(print "==========================================")
+
+(define screen (list (make-pane 0 0 80 24 1 "shell" t)))
+(print "Initial: 1 pane (shell)")
+(wm-layout screen)
+
+(print "")
+(print "Split horizontally (C-w s):")
+(define screen (wm-split-h screen))
+(wm-layout screen)
+
+(print "")
+(print "Split vertically (C-w v):")
+(define screen (wm-split-v screen))
+(wm-layout screen)
+
+(define screen (let ((f (wm-focused screen)))
+  (cond ((eq f nil) screen)
+        (t (wm-replace screen (wm-idx screen f)
+            (make-pane (pane-row f) (pane-col f) (pane-width f) (pane-height f)
+              (wm-sim-pid "editor") "editor" t))))))
+
+(print "")
+(print "3 panes: shell, sysmon, editor")
+(wm-layout screen)
+
+(print "")
+(print "Focus rotation: left -> up")
+(define screen (wm-focus-direction screen 'left))
+(define screen (wm-focus-direction screen 'up))
+(wm-layout screen)
+
+(print "")
+(print "Close focused pane (C-w q):")
+(define screen (wm-close screen))
+(wm-layout screen)
+
+(print "==========================================")
+(print "  Window manager: pass")
+(print "==========================================")

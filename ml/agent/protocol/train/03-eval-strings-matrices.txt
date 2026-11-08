@@ -1,0 +1,95 @@
+;G:Count the characters in transformer.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(length "transformer"))
+
+;G:Count the characters in transformer.
+;O:eval=>11
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "11")
+
+;G:Join the strings sis and p.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(cat "sis" "p"))
+
+;G:Join the strings sis and p.
+;O:eval=>sisp
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "sisp")
+
+;G:Take four characters at offset two from abcdefgh.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(substr 2 4 "abcdefgh"))
+
+;G:Take four characters at offset two from abcdefgh.
+;O:eval=>cdef
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "cdef")
+
+;G:Find the index of nan in banana.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(str-find "banana" "nan"))
+
+;G:Find the index of nan in banana.
+;O:eval=>2
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "2")
+
+;G:Count the rows in a two by three matrix.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-rows [[1 2 3] [4 5 6]]))
+
+;G:Count the rows in a two by three matrix.
+;O:eval=>2
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "2")
+
+;G:Count the columns in a two by three matrix.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-cols [[1 2 3] [4 5 6]]))
+
+;G:Count the columns in a two by three matrix.
+;O:eval=>3
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "3")
+
+;G:Read row one column zero from the matrix 1 2; 3 4.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-ref [[1 2] [3 4]] 1 0))
+
+;G:Read row one column zero from the matrix 1 2; 3 4.
+;O:eval=>3
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "3")
+
+;G:Add matrix entries ten and twenty and read the second entry.
+;O:start
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-eval '(mat-ref (+ [[1 2]] [[10 20]]) 0 1))
+
+;G:Add matrix entries ten and twenty and read the second entry.
+;O:eval=>22
+;M:
+;A:(agent-eval 'F)|(agent-recall K)|(agent-remember K V)|(agent-think T)|(agent-answer X)
+(agent-answer "22")
